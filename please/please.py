@@ -1,32 +1,21 @@
+import datetime
+
+import art
 import pyfiglet
 import typer
 from jsonstore import JsonStore
 from rich.console import Console
+from rich.markdown import Markdown
+from rich.prompt import Prompt
 from rich.style import Style
 from rich.table import Table
-from rich.markdown import Markdown
-
 
 app = typer.Typer()
 console = Console()
-
-#
+state = {"verbose": False}
 
 # JSONSTORE CONFIG
 store = JsonStore('config.json')
-
-try:
-    with store:
-        title = pyfiglet.figlet_format(
-            f'Hello {store["user_name"]}!', font="slant")
-        console.print(f"{title}", style="magenta")
-except Exception:
-    markdownCode = Markdown("""
-        please callme <Your Name Goes Here>
-    """)
-    console.print(
-        "Sorry, I don't know your name yet. Please use: ", style="bold cyan")
-    console.print(markdownCode)
 
 
 @app.command(short_help="Setup Wizard for First Time Run")
@@ -45,5 +34,43 @@ def delete(task_number: str):
     typer.echo(f"Deleted {task_number}")
 
 
+@app.command()
+def show(date: bool = True, name: bool = True, tasks_list: bool = True):
+    if name == True:
+        user_name = store["user_name"]
+        typer.secho(art.text2art(f"Morning {user_name}!", "tarty2"),
+                    fg=typer.colors.CYAN)
+
+    if date == True:
+        dateNow = datetime.datetime.now()
+        typer.secho(art.text2art(
+            dateNow.strftime("%d %b == %I:%M %p"), "thin3"), fg=typer.colors.MAGENTA)
+
+
+def main(verbose: bool = False):
+    # ASK FOR USERNAME
+    store["user_name"] = typer.prompt(typer.style(
+        "Hello! What can I call you?", fg=typer.colors.CYAN))
+
+    # PRINT INFO AFTER USER ENTERS THEIR NAME
+    codeMarkdown = Markdown("""
+        please callme <Your Name Goes Here>
+    """)
+    typer.echo(typer.style(
+        "\nThanks for letting me know your name!\n", fg=typer.colors.GREEN))
+    typer.echo(typer.style(
+        "\nIf you wanna change your name later, please use: \n", fg=typer.colors.RED))
+    console.print(codeMarkdown)
+
+    # SET DEFAULT VARIABLES
+    store["initial_setup_done"] = True
+    store["tasks"] = []
+
+
 if __name__ == "__main__":
-    app()
+    try:
+        with store:
+            if(store["initial_setup_done"]):
+                app()
+    except Exception:
+        typer.run(main)
