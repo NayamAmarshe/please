@@ -9,6 +9,7 @@ python = "^3.8"
 typer = "^0.4.1"
 rich = "^12.3.0"
 pyfiglet = "^0.8.post1"
+python-jsonstore = "^1.3.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
