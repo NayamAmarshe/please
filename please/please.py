@@ -1,20 +1,37 @@
 import pyfiglet
 import typer
+from jsonstore import JsonStore
 from rich.console import Console
 from rich.style import Style
 from rich.table import Table
+from rich.markdown import Markdown
+
 
 app = typer.Typer()
 console = Console()
 
-user_name = ""
-title = pyfiglet.figlet_format(f'Hello {user_name}!', font='slant')
-console.print(f"{title}", style=Style(blink=True))
+#
+
+# JSONSTORE CONFIG
+store = JsonStore('config.json')
+
+try:
+    with store:
+        title = pyfiglet.figlet_format(
+            f'Hello {store["user_name"]}!', font="slant")
+        console.print(f"{title}", style="magenta")
+except Exception:
+    markdownCode = Markdown("""
+        please callme <Your Name Goes Here>
+    """)
+    console.print(
+        "Sorry, I don't know your name yet. Please use: ", style="bold cyan")
+    console.print(markdownCode)
 
 
 @app.command(short_help="Setup Wizard for First Time Run")
-def name(name: str):
-    user_name = name
+def callme(name: str):
+    store["user_name"] = name
     typer.echo(f"Thanks for letting me know your name!")
 
 
