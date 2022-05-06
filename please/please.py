@@ -1,4 +1,7 @@
+#!/usr/bin/env python
 import datetime
+import os
+from os.path import expanduser
 
 import art
 import pyfiglet
@@ -15,7 +18,14 @@ console = Console()
 state = {"verbose": False}
 
 # JSONSTORE CONFIG
-store = JsonStore('config.json')
+home = expanduser('~')
+config_path = os.path.join(expanduser("~"), ".config", "please")
+print(f"Config Path: {config_path}")
+
+if not os.path.exists(config_path):
+    os.makedirs(config_path)
+
+store = JsonStore(os.path.join(config_path, "config.json"))
 
 
 @app.command(short_help="Setup Wizard for First Time Run")
