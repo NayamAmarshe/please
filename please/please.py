@@ -19,9 +19,7 @@ console = Console()
 state = {"verbose": False}
 
 # CREATE JSON STORE CONFIG
-home = expanduser('~')
 config_path = os.path.join(expanduser("~"), ".config", "please")
-print(f"Config Path: {config_path}")
 if not os.path.exists(config_path):
     os.makedirs(config_path)
 store = JsonStore(os.path.join(config_path, "config.json"))
