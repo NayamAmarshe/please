@@ -13,18 +13,17 @@ from rich.prompt import Prompt
 from rich.style import Style
 from rich.table import Table
 
+# INITIALIZE PACKAGES
 app = typer.Typer()
 console = Console()
 state = {"verbose": False}
 
-# JSONSTORE CONFIG
+# CREATE JSON STORE CONFIG
 home = expanduser('~')
 config_path = os.path.join(expanduser("~"), ".config", "please")
 print(f"Config Path: {config_path}")
-
 if not os.path.exists(config_path):
     os.makedirs(config_path)
-
 store = JsonStore(os.path.join(config_path, "config.json"))
 
 
@@ -72,7 +71,7 @@ def main(verbose: bool = False):
         "\nIf you wanna change your name later, please use: \n", fg=typer.colors.RED))
     console.print(codeMarkdown)
 
-    # SET DEFAULT VARIABLES
+    # SET DEFAULT VARIABLES IN JSON DATASTORE
     store["initial_setup_done"] = True
     store["tasks"] = []
 
