@@ -81,7 +81,6 @@ def show(date: bool = True, name: bool = True, tasks_list: bool = True):
     if name == True:
         user_name = store["user_name"]
         time_of_day = get_time_of_day(int(dateNow.strftime("%H")))
-        print(dateNow.strftime("%H"))
         typer.secho(art.text2art(f"{time_of_day} {user_name}!", "tarty7"),
                     fg=typer.colors.YELLOW)
 
