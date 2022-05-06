@@ -18,7 +18,7 @@ app = typer.Typer()
 console = Console()
 state = {"verbose": False}
 
-# CREATE JSON STORE CONFIG
+# CREATE JSON STORE CONFIG IN ~/.config/please
 config_path = os.path.join(expanduser("~"), ".config", "please")
 if not os.path.exists(config_path):
     os.makedirs(config_path)
@@ -41,20 +41,9 @@ def delete(task_number: str):
     typer.echo(f"Deleted {task_number}")
 
 
-@app.command()
-def show(date: bool = True, name: bool = True, tasks_list: bool = True):
-    if name == True:
-        user_name = store["user_name"]
-        typer.secho(art.text2art(f"Morning {user_name}!", "tarty2"),
-                    fg=typer.colors.CYAN)
-
-    if date == True:
-        dateNow = datetime.datetime.now()
-        typer.secho(art.text2art(
-            dateNow.strftime("%d %b == %I:%M %p"), "thin3"), fg=typer.colors.MAGENTA)
-
-
-def main(verbose: bool = False):
+@app.command(short_help="First run setup wizard")
+def setup():
+    # SETUP WIZARD
     # ASK FOR USERNAME
     store["user_name"] = typer.prompt(typer.style(
         "Hello! What can I call you?", fg=typer.colors.CYAN))
@@ -74,10 +63,27 @@ def main(verbose: bool = False):
     store["tasks"] = []
 
 
+@app.callback(invoke_without_command=True)
+def show(date: bool = True, name: bool = True, tasks_list: bool = True):
+    if name == True:
+        user_name = store["user_name"]
+        # TODO: ADD MORNING, AFTERNOON AND EVENING
+        typer.secho(art.text2art(f"Morning {user_name}!", "tarty7"),
+                    fg=typer.colors.CYAN)
+
+    if date == True:
+        # TODO: POSSIBLY DELETE THIS AND REPLACE WITH BASH INSTEAD
+        dateNow = datetime.datetime.now()
+        typer.secho(art.text2art(
+            dateNow.strftime("%d %b == %I:%M %p"), "thin3"), fg=typer.colors.MAGENTA)
+
+
 if __name__ == "__main__":
     try:
+        # IF CONFIG ALREADY HAS INITIAL_SETUP_DONE TO TRUE, FIRE THE APP
         with store:
             if(store["initial_setup_done"]):
                 app()
     except Exception:
-        typer.run(main)
+        # IF CONFIG DOESN'T EXIST, CALL THE SETUP WIZARD
+        typer.run(setup)
