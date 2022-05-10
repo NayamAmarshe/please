@@ -67,6 +67,10 @@ def add(task: str):
 
 @ app.command(short_help='Deletes a Task')
 def delete(index: int):
+    if index >= len(config["tasks"]):
+        print("Are you sure you gave me the correct number?")
+        return
+
     if len(config["tasks"]) > 0:
         deleted_task = config["tasks"][index]
         del config["tasks"][index]
@@ -77,12 +81,34 @@ def delete(index: int):
         print("Sorry, I've got no tasks to delete")
 
 
-@ app.command(short_help='Marks a task as done')
-def done(task: str):
-    config["tasks"][task] = "✔️"
-    write_config(config)
-    typer.echo(f"Updated Task List")
-    showtasks(config["tasks"])
+@ app.command(short_help='Mark a task as done')
+def done(index: int):
+    if index >= len(config["tasks"]):
+        print("Are you sure you gave me the correct number?")
+        return
+
+    if len(config["tasks"]) > 0:
+        config["tasks"][index]["done"] = True
+        write_config(config)
+        typer.echo(f"Updated Task List")
+        showtasks(config["tasks"])
+    else:
+        print("Sorry, I've got no tasks to mark as done")
+
+
+@ app.command(short_help='Mark a task as undone')
+def undone(index: int):
+    if index >= len(config["tasks"]):
+        print("Are you sure you gave me the correct number?")
+        return
+
+    if len(config["tasks"]) > 0:
+        config["tasks"][index]["done"] = False
+        write_config(config)
+        typer.echo(f"Updated Task List")
+        showtasks(config["tasks"])
+    else:
+        print("Sorry, I've got no tasks to mark as undone")
 
 
 def showtasks(tasks_list):
@@ -125,14 +151,14 @@ def setup():
     write_config(config)
 
 
-@ app.callback(invoke_without_command=True)
+@ app.callback(invoke_without_command=False)
 def show():
     dateNow = datetime.datetime.now()
 
     user_name = config["user_name"]
     time_of_day = get_time_of_day(int(dateNow.strftime("%H")))
-    typer.secho(art.text2art(f"{time_of_day} {user_name}!", "tarty7"),
-                fg=typer.colors.YELLOW)
+    typer.secho(art.text2art(
+        f"{time_of_day} {user_name}!", "tarty7"), fg=typer.colors.YELLOW)
 
     # TODO: POSSIBLY DELETE THIS AND REPLACE WITH BASH INSTEAD
     dateNow = datetime.datetime.now()
