@@ -18,18 +18,6 @@ app = typer.Typer()
 console = Console()
 state = {"verbose": False}
 
-# CREATE JSON STORE CONFIG IN ~/.config/please
-config_path = os.path.join(expanduser("~"), ".config", "please")
-if not os.path.exists(config_path):
-    os.makedirs(config_path)
-
-try:  # Try reading the config.json file
-    with open(os.path.join(config_path, "config.json")) as config_file:
-        config = json.load(config_file)  # Set config variable to json data
-except:  # If it doesn't exist, create a new config.json file
-    open(os.path.join(config_path, "config.json"), "w")
-
-
 def write_config(data):
     with open(os.path.join(config_path, "config.json"), 'w') as of:
         of.write(json.dumps(data, indent=2))  # 'indent' formats json properly
@@ -151,7 +139,7 @@ def setup():
     write_config(config)
 
 
-@ app.callback(invoke_without_command=False)
+@ app.callback(invoke_without_command=True) # Question: Why was this turned to false again?
 def show():
     dateNow = datetime.datetime.now()
 
@@ -169,8 +157,21 @@ def show():
 
 
 if __name__ == "__main__":
+    # CREATE JSON STORE CONFIG IN ~/.config/please
+
+    config_path = os.path.join(expanduser("~"), ".config", "please")
+    if not os.path.exists(config_path):
+        os.makedirs(config_path)
+
     # IF CONFIG ALREADY HAS INITIAL_SETUP_DONE TO TRUE, FIRE THE APP
-    if(config["initial_setup_done"] == True):
-        app()
-    else:
+    try:  # Try reading the config.json file
+        with open(os.path.join(config_path, "config.json")) as config_file:
+            config = json.load(config_file)  # Set config variable to json data
+    except:  # If it doesn't exist, create a new config.json file
+        open(os.path.join(config_path, "config.json"), "w")
         typer.run(setup)
+    else:   #if try block raises no exception
+        if(config["initial_setup_done"] == True):
+            app()
+        else:
+            typer.run(setup)
