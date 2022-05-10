@@ -140,7 +140,7 @@ def setup():
 
 
 @ app.callback(invoke_without_command=True) # Question: Why was this turned to false again?
-def show():
+def show(ctx: typer.Context): #THIS ARGUMENT IS NEEDED TO SEE THE DATA DURING EXECUTION
     dateNow = datetime.datetime.now()
 
     user_name = config["user_name"]
@@ -152,8 +152,9 @@ def show():
     dateNow = datetime.datetime.now()
     typer.secho(art.text2art(
         dateNow.strftime("%d %b == %I:%M %p"), "thin3"), fg=typer.colors.MAGENTA)
-
-    showtasks(config["tasks"])
+    
+    if ctx.invoked_subcommand is None: # CHECK IF THERE IS AN INVOKED COMMAND OR NOT
+        showtasks(config["tasks"]) # IF THERE IS NO INVOKED COMMAND, PRINT THE TASK LIST
 
 
 if __name__ == "__main__":
