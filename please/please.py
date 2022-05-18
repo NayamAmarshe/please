@@ -18,6 +18,7 @@ app = typer.Typer()
 console = Console()
 state = {"verbose": False}
 
+
 def write_config(data):
     with open(os.path.join(config_path, "config.json"), 'w') as of:
         of.write(json.dumps(data, indent=2))  # 'indent' formats json properly
@@ -139,8 +140,9 @@ def setup():
     write_config(config)
 
 
-@ app.callback(invoke_without_command=True) # Question: Why was this turned to false again?
-def show(ctx: typer.Context): #THIS ARGUMENT IS NEEDED TO SEE THE DATA DURING EXECUTION
+# Question: Why was this turned to false again?
+@ app.callback(invoke_without_command=True)
+def show(ctx: typer.Context):  # THIS ARGUMENT IS NEEDED TO SEE THE DATA DURING EXECUTION
     dateNow = datetime.datetime.now()
 
     user_name = config["user_name"]
@@ -152,9 +154,10 @@ def show(ctx: typer.Context): #THIS ARGUMENT IS NEEDED TO SEE THE DATA DURING EX
     dateNow = datetime.datetime.now()
     typer.secho(art.text2art(
         dateNow.strftime("%d %b == %I:%M %p"), "thin3"), fg=typer.colors.MAGENTA)
-    
-    if ctx.invoked_subcommand is None: # CHECK IF THERE IS AN INVOKED COMMAND OR NOT
-        showtasks(config["tasks"]) # IF THERE IS NO INVOKED COMMAND, PRINT THE TASK LIST
+
+    if ctx.invoked_subcommand is None:  # CHECK IF THERE IS AN INVOKED COMMAND OR NOT
+        # IF THERE IS NO INVOKED COMMAND, PRINT THE TASK LIST
+        showtasks(config["tasks"])
 
 
 if __name__ == "__main__":
@@ -171,7 +174,7 @@ if __name__ == "__main__":
     except:  # If it doesn't exist, create a new config.json file
         open(os.path.join(config_path, "config.json"), "w")
         typer.run(setup)
-    else:   #if try block raises no exception
+    else:  # if try block raises no exception
         if(config["initial_setup_done"] == True):
             app()
         else:
