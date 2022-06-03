@@ -2,6 +2,7 @@
 import datetime
 import os
 from os.path import expanduser
+import shutil
 
 import art
 import pyfiglet
@@ -13,6 +14,7 @@ from rich.markdown import Markdown
 from rich.prompt import Prompt
 from rich.style import Style
 from rich.table import Table
+from utils import center
 
 # INITIALIZE PACKAGES
 app = typer.Typer()
@@ -114,12 +116,14 @@ def showtasks(tasks_list):
         # PRINTING THE TABLE (COULD BE MADE PRETTIER)
         console.print(table1)
     else:
-        print("Looking good, no tasks 😁")
+        typer.secho(center("Looking good, no tasks 😁"),
+                    fg=typer.colors.BRIGHT_RED)
+
 
 def getquotes():
     try:
-        qreq = requests.get("https://api.quotable.io/random", timeout = 5).json()
-    except: #if offline
+        qreq = requests.get("https://api.quotable.io/random", timeout=5).json()
+    except:  # if offline
         return {'content': 'You can only make sense of the online world by going offline and by getting the wisdom and emotional clarity to know how to make the best use of the Internet.', 'author': 'Pico Iyer'}
     else:
         return qreq
@@ -157,14 +161,13 @@ def show(ctx: typer.Context):  # THIS ARGUMENT IS NEEDED TO SEE THE DATA DURING 
     user_name = config["user_name"]
     quote = getquotes()
     time_of_day = get_time_of_day(int(dateNow.strftime("%H")))
-    typer.secho(art.text2art(
-        f"{time_of_day} {user_name}!", "tarty7"), fg=typer.colors.YELLOW)
 
     # TODO: POSSIBLY DELETE THIS AND REPLACE WITH BASH INSTEAD
     dateNow = datetime.datetime.now()
-    typer.secho(art.text2art(
-        dateNow.strftime("%d %b == %I:%M %p"), "thin3"), fg=typer.colors.MAGENTA)
-    print(quote['content'] + "\n- " + quote['author'])
+    typer.secho(center(dateNow.strftime("%d %b | %I:%M %p")),
+                fg=typer.colors.MAGENTA)
+    print(center(quote['content']))
+    typer.secho(center("- " + quote['author']) + "\n", fg=typer.colors.BLACK)
     if ctx.invoked_subcommand is None:  # CHECK IF THERE IS AN INVOKED COMMAND OR NOT
         # IF THERE IS NO INVOKED COMMAND, PRINT THE TASK LIST
         showtasks(config["tasks"])
