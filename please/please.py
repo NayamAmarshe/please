@@ -14,7 +14,9 @@ from rich.markdown import Markdown
 from rich.prompt import Prompt
 from rich.style import Style
 from rich.table import Table
+from rich.align import Align
 from utils import center
+import imgrender
 
 # INITIALIZE PACKAGES
 app = typer.Typer()
@@ -114,7 +116,8 @@ def showtasks(tasks_list):
             task_status = "✅" if task["done"] else "❌"
             table1.add_row(str(index), task_name, task_status)
         # PRINTING THE TABLE (COULD BE MADE PRETTIER)
-        console.print(table1)
+
+        console.print(Align(table1, "center"))
     else:
         typer.secho(center("Looking good, no tasks 😁"),
                     fg=typer.colors.BRIGHT_RED)
@@ -122,7 +125,7 @@ def showtasks(tasks_list):
 
 def getquotes():
     try:
-        qreq = requests.get("https://api.quotable.io/random", timeout=5).json()
+        qreq = requests.get("https://api.quotable.io/random").json()
     except:  # if offline
         return {'content': 'You can only make sense of the online world by going offline and by getting the wisdom and emotional clarity to know how to make the best use of the Internet.', 'author': 'Pico Iyer'}
     else:
@@ -159,15 +162,22 @@ def show(ctx: typer.Context):  # THIS ARGUMENT IS NEEDED TO SEE THE DATA DURING 
     dateNow = datetime.datetime.now()
 
     user_name = config["user_name"]
-    quote = getquotes()
+    # quote = getquotes()
     time_of_day = get_time_of_day(int(dateNow.strftime("%H")))
+
+    # PRINT ART
+    # print(imgrender.get_image("please/images/pixil-layer-Background.png"))
 
     # TODO: POSSIBLY DELETE THIS AND REPLACE WITH BASH INSTEAD
     dateNow = datetime.datetime.now()
     typer.secho(center(dateNow.strftime("%d %b | %I:%M %p")),
                 fg=typer.colors.MAGENTA)
-    print(center(quote['content']))
-    typer.secho(center("- " + quote['author']) + "\n", fg=typer.colors.BLACK)
+
+    # PRINT QUOTE
+    # print(center(quote['content']))
+    # typer.secho(center("- " + quote['author']) + "\n", fg=typer.colors.BLACK)
+
+    # PRINT TASKS
     if ctx.invoked_subcommand is None:  # CHECK IF THERE IS AN INVOKED COMMAND OR NOT
         # IF THERE IS NO INVOKED COMMAND, PRINT THE TASK LIST
         showtasks(config["tasks"])
