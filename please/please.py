@@ -8,7 +8,6 @@ import art
 import pyfiglet
 import typer
 import json
-import requests
 import random
 from rich.console import Console
 from rich.markdown import Markdown
@@ -105,17 +104,6 @@ def undone(index: int):
     else:
         print("Sorry, I've got no tasks to mark as undone")
 
-@ app.command(short_help='Generate quote cache')
-def genquotecache(limit = 100):
-    try:
-        qreq = requests.get("https://quotable.io/quotes?limit=" + str(limit)).json()
-    except:
-        print("Cannot contact server... Please run the command later again with option genquotecache to generate quote cache")
-    else:
-        with open(os.path.join(config_path, "quotes.json"), 'w') as of:
-            of.write(json.dumps(qreq, indent = 2))
-    print(center('\nQuote cache generated!'))
-
 def showtasks(tasks_list):
     if len(tasks_list) > 0:
         table1 = Table(show_header=True, header_style='bold')
@@ -134,9 +122,9 @@ def showtasks(tasks_list):
                     fg=typer.colors.BRIGHT_RED)
 
 def getquotes():
-    with open(os.path.join(config_path, "quotes.json"), 'r') as qf:
+    with open("quotes.json", 'r') as qf:
         quotes_file = json.load(qf)    
-    return(quotes_file['results'][random.randrange(0, quotes_file['count'])])
+    return(quotes_file[random.randrange(0, len(quotes_file))])
 
 @ app.command(short_help="Reset data and run Setup Wizard")
 def setup():
@@ -160,8 +148,6 @@ def setup():
     config["initial_setup_done"] = True
     config["tasks"] = []
     write_config(config)
-    print('Building quotes cache...')
-    genquotecache(50)
 
 
 # Question: Why was this turned to false again?
@@ -170,11 +156,7 @@ def show(ctx: typer.Context):  # THIS ARGUMENT IS NEEDED TO SEE THE DATA DURING 
     dateNow = datetime.datetime.now()
 
     user_name = config["user_name"]
-    try:
-        quote = getquotes()
-    except:
-        quote = {'content' : "Run please with option genquotecache with an internet connection to see a nice quote here on each run :)", 'author': 'Dev'}
-    time_of_day = get_time_of_day(int(dateNow.strftime("%H")))
+    quote = getquotes()
 
     # PRINT ART
     # print(imgrender.get_image("please/images/pixil-layer-Background.png"))
@@ -185,16 +167,13 @@ def show(ctx: typer.Context):  # THIS ARGUMENT IS NEEDED TO SEE THE DATA DURING 
                 fg=typer.colors.MAGENTA)
 
     # PRINT QUOTE
-    # print(center(quote['content']))
-    # typer.secho(center("- " + quote['author']) + "\n", fg=typer.colors.BLACK)
+    print(center(quote['content']))
+    typer.secho(center("- " + quote['author']) + "\n", fg=typer.colors.BLACK)
 
     # PRINT TASKS
     if ctx.invoked_subcommand is None:  # CHECK IF THERE IS AN INVOKED COMMAND OR NOT
         # IF THERE IS NO INVOKED COMMAND, PRINT THE TASK LIST
         showtasks(config["tasks"])
-        # PRINT QUOTE
-        print(center(quote['content']))
-        typer.secho(center("- " + quote['author']) + "\n", fg=typer.colors.BLACK)
 
 
 if __name__ == "__main__":
