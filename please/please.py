@@ -18,7 +18,7 @@ from rich.style import Style
 from rich.table import Table
 import rich
 
-from utils import center, center_print, center_print_wrap
+from please.utils import center, center_print, center_print_wrap
 
 # INITIALIZE PACKAGES
 app = typer.Typer()
@@ -186,7 +186,7 @@ def show(ctx: typer.Context):  # THIS ARGUMENT IS NEEDED TO SEE THE DATA DURING 
         showtasks(config["tasks"])
 
 
-if __name__ == "__main__":
+def main():
     # CREATE JSON STORE CONFIG IN ~/.config/please
     config_path = os.path.join(expanduser("~"), ".config", "please")
     if not os.path.exists(config_path):
@@ -195,6 +195,7 @@ if __name__ == "__main__":
     # IF CONFIG ALREADY HAS INITIAL_SETUP_DONE TO TRUE, FIRE THE APP
     try:  # Try reading the config.json file
         with open(os.path.join(config_path, "config.json")) as config_file:
+            global config
             config = json.load(config_file)  # Set config variable to json data
     except:  # If it doesn't exist, create a new config.json file
         open(os.path.join(config_path, "config.json"), "w")
@@ -204,3 +205,6 @@ if __name__ == "__main__":
             app()
         else:
             typer.run(setup)
+
+
+main()
