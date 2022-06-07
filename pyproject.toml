@@ -2,7 +2,7 @@
 name = "please"
 version = "0.1.0"
 description = ""
-authors = ["Zeffo <25067102+NayamAmarshe@users.noreply.github.com>"]
+authors = ["Nayam Amarshe <25067102+NayamAmarshe@users.noreply.github.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.8"
@@ -22,3 +22,6 @@ pytest = "^5.2"
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+[too.poetry.scripts]
+please="please.please:main"

@@ -131,7 +131,7 @@ def showtasks(tasks_list):
 
 
 def getquotes():
-    with open("./quotes.json", 'r') as qf:
+    with open("./please/quotes.json", 'r') as qf:
         quotes_file = json.load(qf)
     return(quotes_file[random.randrange(0, len(quotes_file))])
 
@@ -188,7 +188,6 @@ def show(ctx: typer.Context):  # THIS ARGUMENT IS NEEDED TO SEE THE DATA DURING 
 
 if __name__ == "__main__":
     # CREATE JSON STORE CONFIG IN ~/.config/please
-
     config_path = os.path.join(expanduser("~"), ".config", "please")
     if not os.path.exists(config_path):
         os.makedirs(config_path)
