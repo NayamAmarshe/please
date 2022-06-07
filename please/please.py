@@ -79,13 +79,13 @@ def delete(index: int):
 
 @ app.command(short_help='Mark a task as done')
 def done(index: int):
+
     if index >= len(config["tasks"]):
         print("Are you sure you gave me the correct number?")
         return
 
     if len(config["tasks"]) > 0:
         config["tasks"][index]["done"] = True
-
         write_config(config)
         typer.echo(f"Updated Task List")
         showtasks(config["tasks"])
@@ -109,17 +109,22 @@ def undone(index: int):
 
 
 def showtasks(tasks_list):
-    if len(tasks_list) > 0:
+    completed_all_tasks = True
+    for task in config["tasks"]:
+        if task["done"] == False:
+            completed_all_tasks = False
+
+    if len(tasks_list) > 0 and not completed_all_tasks:
         table1 = Table(show_header=True, header_style='bold')
         table1.add_column('Number')
         table1.add_column('Task')
         table1.add_column('Status')
+
         for index, task in enumerate(tasks_list):
             task_name = f"""[#A0FF55]{task["name"]}[/]""" if task["done"] else f"""[#FF5555]{task["name"]}[/]"""
             task_status = "✅" if task["done"] else "❌"
             table1.add_row(str(index), task_name, task_status)
         # PRINTING THE TABLE (COULD BE MADE PRETTIER)
-
         center_print(table1)
     else:
         center_print("[green]Looking good, no pending tasks 😁[/]")
@@ -192,7 +197,6 @@ if __name__ == "__main__":
     try:  # Try reading the config.json file
         with open(os.path.join(config_path, "config.json")) as config_file:
             config = json.load(config_file)  # Set config variable to json data
-            print(config)
     except:  # If it doesn't exist, create a new config.json file
         open(os.path.join(config_path, "config.json"), "w")
         typer.run(setup)
