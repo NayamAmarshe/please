@@ -9,6 +9,7 @@ from os.path import expanduser
 import art
 import imgrender
 import pyfiglet
+import rich
 import typer
 from rich.align import Align
 from rich.console import Console
@@ -16,14 +17,24 @@ from rich.markdown import Markdown
 from rich.prompt import Prompt
 from rich.style import Style
 from rich.table import Table
-import rich
 
-from please.utils import center, center_print, center_print_wrap
 
 # INITIALIZE PACKAGES
 app = typer.Typer()
 console = Console()
 state = {"verbose": False}
+
+
+def center(text: str):
+    return text.center(shutil.get_terminal_size().columns)
+
+
+def center_print(text: str, style: str = None):
+    return console.print(Align.center(text), style=style)
+
+
+def center_print_wrap(text: str, style: str):
+    return console.print(Align.center(text, style=style, width=shutil.get_terminal_size().columns//2))
 
 
 def write_config(data):
@@ -131,7 +142,9 @@ def showtasks(tasks_list):
 
 
 def getquotes():
-    with open("./please/quotes.json", 'r') as qf:
+    __location__ = os.path.realpath(
+        os.path.join(os.getcwd(), os.path.dirname(__file__)))
+    with open(os.path.join(__location__, "quotes.json"), 'r') as qf:
         quotes_file = json.load(qf)
     return(quotes_file[random.randrange(0, len(quotes_file))])
 

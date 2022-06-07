@@ -3,6 +3,7 @@ name = "please"
 version = "0.1.0"
 description = ""
 authors = ["Nayam Amarshe <25067102+NayamAmarshe@users.noreply.github.com>"]
+packages = [{include = "please"}]
 
 [tool.poetry.dependencies]
 python = "^3.8"
