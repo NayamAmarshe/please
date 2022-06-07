@@ -146,7 +146,8 @@ def getquotes():
         os.path.join(os.getcwd(), os.path.dirname(__file__)))
     with open(os.path.join(__location__, "quotes.json"), 'r') as qf:
         quotes_file = json.load(qf)
-    return(quotes_file[random.randrange(0, len(quotes_file))])
+    print(len(quotes_file))
+    return(quotes_file[random.randrange(0, 500)])
 
 
 @ app.command(short_help="Reset data and run Setup Wizard")
@@ -187,7 +188,7 @@ def show(ctx: typer.Context):  # THIS ARGUMENT IS NEEDED TO SEE THE DATA DURING 
     # TODO: POSSIBLY DELETE THIS AND REPLACE WITH BASH INSTEAD
     dateNow = datetime.datetime.now()
     center_print(rich.rule.Rule(
-        "[yellow1]" + dateNow.strftime("%d %b | %I:%M %p") + "[/]", style="yellow1"))
+        "[yellow1] Hello " + config["user_name"] + "! It's " + dateNow.strftime("%d %b | %I:%M %p") + "[/]", style="yellow1"))
 
     # PRINT QUOTE
     center_print_wrap("[#00F3FF]" + quote["content"] + "[/]", "italic")
@@ -201,6 +202,7 @@ def show(ctx: typer.Context):  # THIS ARGUMENT IS NEEDED TO SEE THE DATA DURING 
 
 def main():
     # CREATE JSON STORE CONFIG IN ~/.config/please
+    global config_path
     config_path = os.path.join(expanduser("~"), ".config", "please")
     if not os.path.exists(config_path):
         os.makedirs(config_path)
