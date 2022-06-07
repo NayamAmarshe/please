@@ -1,22 +1,24 @@
 #!/usr/bin/env python
 import datetime
+import json
 import os
-from os.path import expanduser
+import random
 import shutil
+from os.path import expanduser
 
 import art
+import imgrender
 import pyfiglet
 import typer
-import json
-import random
+from rich.align import Align
 from rich.console import Console
 from rich.markdown import Markdown
 from rich.prompt import Prompt
 from rich.style import Style
 from rich.table import Table
-from rich.align import Align
-from utils import center
-import imgrender
+import rich
+
+from utils import center, center_print, center_print_wrap
 
 # INITIALIZE PACKAGES
 app = typer.Typer()
@@ -69,7 +71,7 @@ def delete(index: int):
         deleted_task = config["tasks"][index]
         del config["tasks"][index]
         write_config(config)
-        typer.echo(f"Deleted {deleted_task}")
+        typer.echo(f"Deleted '{deleted_task['name']}'")
         showtasks(config["tasks"])
     else:
         print("Sorry, I've got no tasks to delete")
@@ -83,6 +85,7 @@ def done(index: int):
 
     if len(config["tasks"]) > 0:
         config["tasks"][index]["done"] = True
+
         write_config(config)
         typer.echo(f"Updated Task List")
         showtasks(config["tasks"])
@@ -104,6 +107,7 @@ def undone(index: int):
     else:
         print("Sorry, I've got no tasks to mark as undone")
 
+
 def showtasks(tasks_list):
     if len(tasks_list) > 0:
         table1 = Table(show_header=True, header_style='bold')
@@ -111,20 +115,21 @@ def showtasks(tasks_list):
         table1.add_column('Task')
         table1.add_column('Status')
         for index, task in enumerate(tasks_list):
-            task_name = task["name"]
+            task_name = f"""[#A0FF55]{task["name"]}[/]""" if task["done"] else f"""[#FF5555]{task["name"]}[/]"""
             task_status = "✅" if task["done"] else "❌"
             table1.add_row(str(index), task_name, task_status)
         # PRINTING THE TABLE (COULD BE MADE PRETTIER)
 
-        console.print(Align(table1, "center"))
+        center_print(table1)
     else:
-        typer.secho(center("Looking good, no tasks 😁"),
-                    fg=typer.colors.BRIGHT_RED)
+        center_print("[green]Looking good, no pending tasks 😁[/]")
+
 
 def getquotes():
-    with open("quotes.json", 'r') as qf:
-        quotes_file = json.load(qf)    
+    with open("./quotes.json", 'r') as qf:
+        quotes_file = json.load(qf)
     return(quotes_file[random.randrange(0, len(quotes_file))])
+
 
 @ app.command(short_help="Reset data and run Setup Wizard")
 def setup():
@@ -163,12 +168,12 @@ def show(ctx: typer.Context):  # THIS ARGUMENT IS NEEDED TO SEE THE DATA DURING 
 
     # TODO: POSSIBLY DELETE THIS AND REPLACE WITH BASH INSTEAD
     dateNow = datetime.datetime.now()
-    typer.secho(center(dateNow.strftime("%d %b | %I:%M %p")),
-                fg=typer.colors.MAGENTA)
+    center_print(rich.rule.Rule(
+        "[yellow1]" + dateNow.strftime("%d %b | %I:%M %p") + "[/]", style="yellow1"))
 
     # PRINT QUOTE
-    print(center(quote['content']))
-    typer.secho(center("- " + quote['author']) + "\n", fg=typer.colors.BLACK)
+    center_print_wrap("[#00F3FF]" + quote["content"] + "[/]", "italic")
+    center_print_wrap("[red]- " + quote['author'] + "[/]\n", "italic")
 
     # PRINT TASKS
     if ctx.invoked_subcommand is None:  # CHECK IF THERE IS AN INVOKED COMMAND OR NOT
@@ -187,6 +192,7 @@ if __name__ == "__main__":
     try:  # Try reading the config.json file
         with open(os.path.join(config_path, "config.json")) as config_file:
             config = json.load(config_file)  # Set config variable to json data
+            print(config)
     except:  # If it doesn't exist, create a new config.json file
         open(os.path.join(config_path, "config.json"), "w")
         typer.run(setup)
