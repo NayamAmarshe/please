@@ -146,7 +146,6 @@ def getquotes():
         os.path.join(os.getcwd(), os.path.dirname(__file__)))
     with open(os.path.join(__location__, "quotes.json"), 'r') as qf:
         quotes_file = json.load(qf)
-    print(len(quotes_file))
     return(quotes_file[random.randrange(0, 500)])
 
 
