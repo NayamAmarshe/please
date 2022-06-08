@@ -60,7 +60,7 @@ def all_tasks_done():
 def callme(name: str):
     config["user_name"] = name
     write_config(config)
-    typer.echo(f"Thanks for letting me know your name!")
+    center_print("\nThanks for letting me know your name!\n", "black on green")
 
 
 @ app.command(short_help='Add a Task')
@@ -71,7 +71,7 @@ def add(task: str):
     }
     config["tasks"].append(new_task)
     write_config(config)
-    typer.echo(f"Added \"{task}\" to the list")
+    center_print(f"\nAdded \"{task}\" to the list\n", "red on black")
     print_tasks(config["tasks"])
 
 
@@ -120,7 +120,7 @@ def undone(index: int):
     if len(config["tasks"]) > 0 and not all_tasks_done():
         config["tasks"][index]["done"] = False
         write_config(config)
-        typer.echo(f"Updated Task List")
+        center_print("Updated Task List", "black on green")
         print_tasks(config["tasks"])
     else:
         center_print_wrap(
@@ -176,10 +176,8 @@ def setup():
     codeMarkdown = Markdown("""
         please callme <Your Name Goes Here>
     """)
-    typer.echo(typer.style(
-        "\nThanks for letting me know your name!", fg=typer.colors.GREEN))
-    typer.echo(typer.style(
-        "If you wanna change your name later, please use:", fg=typer.colors.RED))
+    center_print("\nThanks for letting me know your name!")
+    center_print("If you wanna change your name later, please use:", "red")
     console.print(codeMarkdown)
 
     # SET DEFAULT VARIABLES IN JSON DATASTORE
