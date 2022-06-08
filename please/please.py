@@ -6,9 +6,6 @@ import random
 import shutil
 from os.path import expanduser
 
-import art
-import imgrender
-import pyfiglet
 import rich
 import typer
 from rich.align import Align
@@ -22,7 +19,6 @@ from rich.table import Table
 # INITIALIZE PACKAGES
 app = typer.Typer()
 console = Console()
-state = {"verbose": False}
 
 
 def center(text: str):
