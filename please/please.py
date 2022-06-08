@@ -86,8 +86,8 @@ def delete(index: int):
         deleted_task = config["tasks"][index]
         del config["tasks"][index]
         write_config(config)
-        typer.echo(f"Deleted '{deleted_task['name']}'")
-        print_tasks(config["tasks"])
+        center_print(f"Deleted '{deleted_task['name']}'")
+        print_tasks(config["tasks"], True)
     else:
         center_print_wrap(
             "\nSorry, I've got no tasks to delete\n", style="red on black")
@@ -103,7 +103,7 @@ def done(index: int):
     if len(config["tasks"]) > 0 and not all_tasks_done():
         config["tasks"][index]["done"] = True
         write_config(config)
-        center_print("Updated Task List")
+        center_print("Updated Task List", "black on green")
         print_tasks(config["tasks"])
     else:
         center_print_wrap(
@@ -143,8 +143,8 @@ def showtasks():
         center_print(table1)
 
 
-def print_tasks(tasks_list):
-    if len(tasks_list) > 0 and not all_tasks_done():
+def print_tasks(tasks_list, forced_print=False):
+    if len(tasks_list) > 0 and not all_tasks_done() or forced_print:
         table1 = Table(show_header=True, header_style='bold')
         table1.add_column('Number')
         table1.add_column('Task')
