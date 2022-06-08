@@ -30,5 +30,5 @@ poetry install
 Finally, run the python script with:
 
 ```bash
-poetry run python please/please.py
+python please/please.py
 ```
