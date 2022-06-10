@@ -1,7 +1,5 @@
 # Please - A New Tab Page for your Terminal
 
-![Please Goal](please.png)
-
 # Setup
 
 To get started, first install poetry:
