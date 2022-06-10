@@ -202,17 +202,14 @@ def show(ctx: typer.Context):
     center_print(rich.rule.Rule("[#FFBF00] Hello " + config["user_name"] +
                  "! It's " + dateNow.strftime("%d %b | %I:%M %p") + "[/]", style="#FFBF00"))
 
-    # PRINT QUOTE
-    quote = getquotes()
-    center_print_wrap("[#63D2FF]\"" + quote["content"] + "\"[/]", "italic")
-    center_print_wrap("[#F03A47]- " +
-                      quote['author'] + "[/]\n", "italic")
-
     # PRINT TASKS
     if ctx.invoked_subcommand is None:
         # IF THERE IS NO INVOKED COMMAND, PRINT THE TASK LIST
         print_tasks(config["tasks"])
-
+        # PRINT QUOTE
+        quote = getquotes()
+        center_print_wrap("[#63D2FF]\"" + quote["content"] + "\"[/]", "italic")
+        center_print_wrap("[#F03A47]- " + quote['author'] + "[/]\n", "italic")
 
 def main():
     # CREATE JSON STORE CONFIG IN ~/.config/please
