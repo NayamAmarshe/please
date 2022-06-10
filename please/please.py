@@ -117,7 +117,7 @@ def undone(index: int):
             "\nAre you sure you gave me the correct number to mark as undone?\n", "red on black")
         return
 
-    if len(config["tasks"]) > 0 and not all_tasks_done():
+    if len(config["tasks"]) > 0:
         config["tasks"][index]["done"] = False
         write_config(config)
         center_print("Updated Task List", "black on green")
