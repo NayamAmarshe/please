@@ -71,7 +71,9 @@ def add(task: str):
     }
     config["tasks"].append(new_task)
     write_config(config)
-    center_print(f"\nAdded \"{task}\" to the list\n", "red on black")
+    print("\n")
+    center_print(f"Added \"{task}\" to the list",
+                 "cyan1 on purple3")
     print_tasks(config["tasks"])
 
 
@@ -79,25 +81,28 @@ def add(task: str):
 def delete(index: int):
     if index >= len(config["tasks"]):
         center_print_wrap(
-            "\nAre you sure you gave me the correct number to delete?\n", "red on black")
+            "Are you sure you gave me the correct number to delete?", "bright_red on bright_white")
+        print("\n")
         return
 
     if len(config["tasks"]) > 0:
         deleted_task = config["tasks"][index]
         del config["tasks"][index]
         write_config(config)
-        center_print(f"Deleted '{deleted_task['name']}'")
+        center_print(f"Deleted '{deleted_task['name']}'", "cyan1 on purple3")
         print_tasks(config["tasks"], True)
     else:
         center_print_wrap(
-            "\nSorry, I've got no tasks to delete\n", style="red on black")
+            "Sorry, I've got no tasks to delete", style="bright_red on bright_white")
+        print("\n")
 
 
 @ app.command(short_help='Mark a task as done')
 def done(index: int):
     if index >= len(config["tasks"]):
         center_print_wrap(
-            "\nAre you sure you gave me the correct number to mark as done?\n", "red on black")
+            "Are you sure you gave me the correct number to mark as done?", "bright_red on bright_white")
+        print("\n")
         return
 
     if len(config["tasks"]) > 0 and not all_tasks_done():
@@ -107,14 +112,16 @@ def done(index: int):
         print_tasks(config["tasks"])
     else:
         center_print_wrap(
-            "\nSorry, I've got no tasks to mark as done\n", style="red on black")
+            "Sorry, I've got no tasks to mark as done", style="bright_red on bright_white")
+        print("\n")
 
 
 @app.command(short_help='Mark a task as undone')
 def undone(index: int):
     if index >= len(config["tasks"]):
         center_print_wrap(
-            "\nAre you sure you gave me the correct number to mark as undone?\n", "red on black")
+            "Are you sure you gave me the correct number to mark as undone?", "bright_red on bright_white")
+        print("\n")
         return
 
     if len(config["tasks"]) > 0:
@@ -124,7 +131,8 @@ def undone(index: int):
         print_tasks(config["tasks"])
     else:
         center_print_wrap(
-            "\nSorry, I've got no tasks to mark as undone\n", style="red on black")
+            "Sorry, I've got no tasks to mark as undone", style="bright_red on bright_white")
+        print("\n")
 
 
 @app.command(short_help="Show all Tasks")
@@ -156,7 +164,7 @@ def print_tasks(tasks_list, forced_print=False):
             table1.add_row(str(index), task_name, task_status)
         center_print(table1)
     else:
-        center_print("[green]Looking good, no pending tasks 😁[/]")
+        center_print("[#61E294]Looking good, no pending tasks 😁[/]")
 
 
 def getquotes():
@@ -191,13 +199,14 @@ def show(ctx: typer.Context):
     dateNow = datetime.datetime.now()
     user_name = config["user_name"]
     dateNow = datetime.datetime.now()
-    center_print(rich.rule.Rule(
-        "[yellow1] Hello " + config["user_name"] + "! It's " + dateNow.strftime("%d %b | %I:%M %p") + "[/]", style="yellow1"))
+    center_print(rich.rule.Rule("[#FFBF00] Hello " + config["user_name"] +
+                 "! It's " + dateNow.strftime("%d %b | %I:%M %p") + "[/]", style="#FFBF00"))
 
     # PRINT QUOTE
     quote = getquotes()
-    center_print_wrap("[#00F3FF]" + quote["content"] + "[/]", "italic")
-    center_print_wrap("[red]- " + quote['author'] + "[/]\n", "italic")
+    center_print_wrap("[#63D2FF]\"" + quote["content"] + "\"[/]", "italic")
+    center_print_wrap("[#F03A47]- " +
+                      quote['author'] + "[/]\n", "italic")
 
     # PRINT TASKS
     if ctx.invoked_subcommand is None:
