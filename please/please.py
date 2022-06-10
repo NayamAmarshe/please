@@ -89,6 +89,7 @@ def delete(index: int):
         deleted_task = config["tasks"][index]
         del config["tasks"][index]
         write_config(config)
+        print("\n")
         center_print(f"Deleted '{deleted_task['name']}'", "cyan1 on purple3")
         print_tasks(config["tasks"], True)
     else:
@@ -199,17 +200,18 @@ def show(ctx: typer.Context):
     dateNow = datetime.datetime.now()
     user_name = config["user_name"]
     dateNow = datetime.datetime.now()
-    center_print(rich.rule.Rule("[#FFBF00] Hello " + config["user_name"] +
-                 "! It's " + dateNow.strftime("%d %b | %I:%M %p") + "[/]", style="#FFBF00"))
 
     # PRINT TASKS
     if ctx.invoked_subcommand is None:
+        center_print(rich.rule.Rule("[#FFBF00] Hello " + config["user_name"] +
+                                    "! It's " + dateNow.strftime("%d %b | %I:%M %p") + "[/]", style="#FFBF00"))
         # IF THERE IS NO INVOKED COMMAND, PRINT THE TASK LIST
-        print_tasks(config["tasks"])
         # PRINT QUOTE
         quote = getquotes()
         center_print_wrap("[#63D2FF]\"" + quote["content"] + "\"[/]", "italic")
         center_print_wrap("[#F03A47]- " + quote['author'] + "[/]\n", "italic")
+        print_tasks(config["tasks"])
+
 
 def main():
     # CREATE JSON STORE CONFIG IN ~/.config/please
