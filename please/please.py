@@ -140,7 +140,8 @@ def undone(index: int):
 def showtasks():
     tasks_list = config["tasks"]
     if len(tasks_list) > 0:
-        table1 = Table(show_header=True, header_style='bold')
+        table1 = Table(title="Tasks", title_style="grey39",
+                       header_style="yellow2",  style="yellow2 bold")
         table1.add_column('Number')
         table1.add_column('Task')
         table1.add_column('Status')
@@ -154,16 +155,7 @@ def showtasks():
 
 def print_tasks(tasks_list, forced_print=False):
     if len(tasks_list) > 0 and not all_tasks_done() or forced_print:
-        table1 = Table(show_header=True, header_style='bold')
-        table1.add_column('Number')
-        table1.add_column('Task')
-        table1.add_column('Status')
-
-        for index, task in enumerate(tasks_list):
-            task_name = f"""[#A0FF55]{task["name"]}[/]""" if task["done"] else f"""[#FF5555]{task["name"]}[/]"""
-            task_status = "✅" if task["done"] else "❌"
-            table1.add_row(str(index), task_name, task_status)
-        center_print(table1)
+        showtasks()
     else:
         center_print("[#61E294]Looking good, no pending tasks 😁[/]")
 
