@@ -79,6 +79,7 @@ def add(task: str):
 
 @ app.command(short_help='Deletes a Task')
 def delete(index: int):
+    index = index - 1
     if index >= len(config["tasks"]):
         center_print_wrap(
             "Are you sure you gave me the correct number to delete?", "bright_red on bright_white")
@@ -100,6 +101,7 @@ def delete(index: int):
 
 @ app.command(short_help='Mark a task as done')
 def done(index: int):
+    index = index - 1
     if index >= len(config["tasks"]):
         center_print_wrap(
             "Are you sure you gave me the correct number to mark as done?", "bright_red on bright_white")
@@ -119,6 +121,7 @@ def done(index: int):
 
 @app.command(short_help='Mark a task as undone')
 def undone(index: int):
+    index = index - 1
     if index >= len(config["tasks"]):
         center_print_wrap(
             "Are you sure you gave me the correct number to mark as undone?", "bright_red on bright_white")
@@ -141,15 +144,17 @@ def showtasks():
     tasks_list = config["tasks"]
     if len(tasks_list) > 0:
         table1 = Table(title="Tasks", title_style="grey39",
-                       header_style="yellow2",  style="yellow2 bold")
-        table1.add_column('Number')
+                       header_style="#e85d04",  style="#e85d04 bold")
+        table1.add_column('Number', style="#e85d04")
         table1.add_column('Task')
         table1.add_column('Status')
 
         for index, task in enumerate(tasks_list):
             task_name = f"""[#A0FF55]{task["name"]}[/]""" if task["done"] else f"""[#FF5555]{task["name"]}[/]"""
             task_status = "✅" if task["done"] else "❌"
-            table1.add_row(str(index), task_name, task_status)
+            task_index = "[#A0FF55]" + str(
+                index + 1) + "[/]" if task["done"] else "[#FF5555]" + str(index + 1) + "[/]"
+            table1.add_row(task_index, task_name, task_status)
         center_print(table1)
 
 
