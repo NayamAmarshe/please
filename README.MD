@@ -8,13 +8,14 @@
 
 1. Make sure you have Python 3 installed on your computer.
 2. Open your terminal and paste the command below:
-   ```bash
-    pip install please-cli && echo 'please' >> ~/.`echo $0`rc
-   ```
-   - If you get an error about **'pip not found'**, just replace **pip** with **pip3**.
-3. That's it! Check if `please` command works in your terminal.
 
-###### Having trouble with installation or have any ideas? Please create an issue ticket :)
+   ```bash
+   pip install please-cli && echo 'please' >> ~/.`echo $0`rc
+
+   # If you get an error about 'pip not found', just replace pip with pip3.
+   ```
+
+3. That's it! Check if `please` command works in your terminal.
 
 ### Method 2:
 
@@ -24,14 +25,37 @@
 
    ```bash
    pip install --user ~/Downloads/please_cli* && echo 'please' >> ~/.`echo $0`rc
+
+   # If you get an error about 'pip not found', just replace pip with pip3.
    ```
 
-   - If you get an error about **'pip not found'**, just replace **pip** with **pip3**.
-   - Change the path of the file if you downloaded it somewhere else.
+   Change the path of the file if you downloaded it elsewhere.
 
 4. That's it! Check if `please` command works in your terminal.
 
 ###### Having trouble with installation or have any ideas? Please create an issue ticket :)
+
+# Commands
+
+```bash
+# Show time, quotes and tasks
+please
+
+# Add a task
+please add "TASK NAME"
+
+# Delete a task
+please delete <TASK NUMBER>
+
+# Mark task as done
+please done <TASK NUMBER>
+
+# Mark task as undone
+pleae undone <TASK NUMBER>
+
+# Show tasks even if all tasks are markded as done
+please showtasks
+```
 
 # Local Development
 
