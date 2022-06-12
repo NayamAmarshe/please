@@ -1,7 +1,7 @@
 <center><h1>Please - New Tab Page for your Terminal</h1>
 </center>
 
-<center><img src="please.gif"></img></center>
+<p align="center"><img src="please.gif"></img></center>
 
 <center>
 <h1>Installation</h1>
