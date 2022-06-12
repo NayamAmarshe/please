@@ -71,7 +71,6 @@ def add(task: str):
     }
     config["tasks"].append(new_task)
     write_config(config)
-    print("\n")
     center_print(f"Added \"{task}\" to the list",
                  "cyan1 on purple3")
     print_tasks(config["tasks"])
@@ -83,20 +82,17 @@ def delete(index: int):
     if index >= len(config["tasks"]):
         center_print_wrap(
             "Are you sure you gave me the correct number to delete?", "bright_red on bright_white")
-        print("\n")
         return
 
     if len(config["tasks"]) > 0:
         deleted_task = config["tasks"][index]
         del config["tasks"][index]
         write_config(config)
-        print("\n")
         center_print(f"Deleted '{deleted_task['name']}'", "cyan1 on purple3")
         print_tasks(config["tasks"], True)
     else:
         center_print_wrap(
             "Sorry, I've got no tasks to delete", style="bright_red on bright_white")
-        print("\n")
 
 
 @ app.command(short_help='Mark a task as done')
@@ -105,7 +101,6 @@ def done(index: int):
     if index >= len(config["tasks"]):
         center_print_wrap(
             "Are you sure you gave me the correct number to mark as done?", "bright_red on bright_white")
-        print("\n")
         return
 
     if len(config["tasks"]) > 0 and not all_tasks_done():
@@ -116,7 +111,6 @@ def done(index: int):
     else:
         center_print_wrap(
             "Sorry, I've got no tasks to mark as done", style="bright_red on bright_white")
-        print("\n")
 
 
 @app.command(short_help='Mark a task as undone')
@@ -125,7 +119,6 @@ def undone(index: int):
     if index >= len(config["tasks"]):
         center_print_wrap(
             "Are you sure you gave me the correct number to mark as undone?", "bright_red on bright_white")
-        print("\n")
         return
 
     if len(config["tasks"]) > 0:
@@ -136,7 +129,6 @@ def undone(index: int):
     else:
         center_print_wrap(
             "Sorry, I've got no tasks to mark as undone", style="bright_red on bright_white")
-        print("\n")
 
 
 @app.command(short_help="Show all Tasks")
