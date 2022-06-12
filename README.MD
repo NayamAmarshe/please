@@ -1,11 +1,8 @@
-<center><h1>Please - New Tab Page for your Terminal</h1>
-</center>
+Please - New Tab Page for your Terminal
 
 <p align="center"><img src="please.gif"></img></center>
 
-<center>
-<h1>Installation</h1>
-</center>
+# Installation
 
 ### Method 1:
 
@@ -31,9 +28,7 @@ Having trouble with installation or have any ideas? Please create an issue ticke
    - If you get an error about **'pip not found'**, just type **pip3** instead of **pip**
    - Change the path of the file if you downloaded it somewhere else.
 
-<center>
-<h1>Local Development</h1>
-</center>
+# Local Development
 
 1. To get started, first install poetry:
 
