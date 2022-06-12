@@ -107,3 +107,7 @@ pip uninstall please-cli
 ```
 
 and also edit your **.zshrc** or **.bashrc** file and remove the line that says `please` at the end of the file.
+
+#
+
+#### Made by TGS963 and NayamAmarshe with ⌨ and 🖱
