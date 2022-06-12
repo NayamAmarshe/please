@@ -1,9 +1,15 @@
 [tool.poetry]
 name = "please-cli"
-version = "0.1.0"
+version = "0.1.1"
 description = "A new tab page for your terminal"
 authors = ["Nayam Amarshe", "TGS963"]
 packages = [{include = "please"}]
+license="MIT"
+readme="README.MD"
+repository="https://github.com/NayamAmarshe/please"
+homepage="https://github.com/NayamAmarshe/please"
+documentation="https://github.com/NayamAmarshe/please"
+keywords=["please", "cli", "new tab"]
 
 [tool.poetry.dependencies]
 python = "^3.8"
