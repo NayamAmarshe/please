@@ -1,4 +1,5 @@
 # Please - New Tab Page for your Terminal
+Get a beautifully formatted new tab page with a greeting, date and time, inspirational quotes, your personal tasks and to-do list everytime you open the terminal.
 
 <p align="center"><img src="please.gif"></img></center>
 
