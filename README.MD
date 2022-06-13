@@ -51,10 +51,16 @@ please delete <TASK NUMBER>
 please done <TASK NUMBER>
 
 # Mark task as undone
-pleae undone <TASK NUMBER>
+please undone <TASK NUMBER>
 
 # Show tasks even if all tasks are markded as done
 please showtasks
+
+# Change your name
+please callme "NAME"
+
+# Reset all settings and tasks
+please setup
 ```
 
 # Local Development
