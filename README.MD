@@ -3,6 +3,9 @@ Get a beautifully formatted minimalistic new tab page with a greeting, date and 
 
 <p align="center"><img src="please.gif"></img></center>
 
+![output](https://user-images.githubusercontent.com/25067102/173348490-940f27cc-3c8a-480e-9c27-a9a5a7c27bef.gif)
+
+
 # Installation
 
 ### Method 1:
