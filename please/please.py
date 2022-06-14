@@ -54,7 +54,6 @@ def all_tasks_done() -> bool:
 @app.command(short_help="Change name without resetting data")
 def callme(name: str) -> None:
     """Update the name.
-
     Args:
         name (str): new name
     """
@@ -160,6 +159,31 @@ def undone(index: int) -> None:
         print_tasks()
 
 
+@app.command(short_help="Change task order")
+def move(old_index: int, new_index: int):
+    """Change the order of task.
+
+    Args:
+        old_index (int): current task index
+        new_index (int): new task index
+    """
+    try:
+        config["tasks"][old_index - 1], config["tasks"][new_index - 1] = (
+            config["tasks"][new_index - 1],
+            config["tasks"][old_index - 1],
+        )
+        write_config(config)
+        if old_index != new_index:
+            center_print("Updated Task List", style="black on green")
+        else:
+            center_print("No Updates Made", style="black on yellow")
+        print_tasks(config["tasks"])
+    except:
+        center_print(
+            "Please check the entered index values", style="black on bright_red"
+        )
+
+
 @app.command(short_help="Show all Tasks")
 def showtasks() -> None:
     """Display the list of tasks."""
@@ -191,6 +215,8 @@ def showtasks() -> None:
 
             table1.add_row(task_index, task_name, task_status)
         center_print(table1)
+        return
+    center_print("[#61E294]Looking good, no pending tasks 😁[/]")
 
 
 def print_tasks(forced_print: bool = False) -> None:
