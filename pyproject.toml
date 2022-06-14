@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "please-cli"
-version = "0.2.0"
+version = "0.1.2"
 description = "A new tab page for your terminal"
 authors = ["Nayam Amarshe", "TGS963"]
 packages = [{include = "please"}]

@@ -6,55 +6,58 @@ import random
 import shutil
 from os.path import expanduser
 
-import rich
 import typer
 from rich.align import Align
 from rich.console import Console
 from rich.markdown import Markdown
+from rich.rule import Rule
 from rich.table import Table
 
 app = typer.Typer()
 console = Console()
 
 
-def center(text: str) -> str:
-    return text.center(shutil.get_terminal_size().columns)
+def center_print(text, style: str = None, wrap: bool = False) -> None:
+    """Print text with center alignment.
 
+    Args:
+        text (Union[str, Rule, Table]): object to center align
+        style (str, optional): styling of the object. Defaults to None.
+    """
+    if wrap:
+        width = shutil.get_terminal_size().columns // 2
+    else:
+        width = shutil.get_terminal_size().columns
 
-def center_print(text: str, style: str = None) -> None:
-    return console.print(Align.center(text), style=style)
-
-
-def center_print_wrap(text: str, style: str) -> None:
-    return console.print(
-        Align.center(text, style=style, width=shutil.get_terminal_size().columns // 2)
-    )
+    console.print(Align.center(text, style=style, width=width))
 
 
 def write_config(data: dict) -> None:
+    """Save the config file.
+
+    Args:
+        data (dict): config file
+    """
     with open(os.path.join(config_path, "config.json"), "w") as of:
         of.write(json.dumps(data, indent=2))
 
 
-# function is never called
-
-# def get_time_of_day(x:int) -> str:
-#     if 4 < x <= 12:
-#         return "Morning"
-#     elif 12 < x <= 16:
-#         return "Afternoon"
-#     elif 16 < x <= 20:
-#         return "Evening"
-#     elif (20 < x <= 24) or (x <= 4):
-#         return "Night"
-
-
 def all_tasks_done() -> bool:
+    """Check if all listed tasks are marked "done".
+
+    Returns:
+        bool: True if all are marked "done", else False
+    """
     return all(task["done"] for task in config["tasks"])
 
 
 @app.command(short_help="Change name without resetting data")
 def callme(name: str) -> None:
+    """Update the name.
+
+    Args:
+        name (str): new name
+    """
     config["user_name"] = name
     write_config(config)
     center_print("\nThanks for letting me know your name!\n", "black on green")
@@ -62,82 +65,108 @@ def callme(name: str) -> None:
 
 @app.command(short_help="Add a Task")
 def add(task: str) -> None:
+    """Add new task to the list.
+
+    Args:
+        task (str): task name
+    """
     new_task = {"name": task, "done": False}
     config["tasks"].append(new_task)
     write_config(config)
     center_print(f'Added "{task}" to the list', "cyan1 on purple3")
-    print_tasks(config["tasks"])
+    print_tasks()
 
 
 @app.command(short_help="Deletes a Task")
 def delete(index: int) -> None:
+    """Delete an existing task.
+
+    Args:
+        index (int): task index (1-based)
+    """
     index = index - 1
     if len(config["tasks"]) == 0:
-        center_print_wrap("Task list is empty", style="bright_red on bright_white")
-    elif not 0 <= index < len(config["tasks"]):
-        center_print_wrap(
+        center_print(
+            "Sorry, I've got no tasks to show", style="bright_red on white", wrap=True
+        )
+        return
+    if not 0 <= index < len(config["tasks"]):
+        center_print(
             "Are you sure you gave me the correct number to delete?",
             "bright_red on bright_white",
+            wrap=True,
         )
     else:
         deleted_task = config["tasks"][index]
         del config["tasks"][index]
         write_config(config)
         center_print(f"Deleted '{deleted_task['name']}'", "cyan1 on purple3")
-        print_tasks(config["tasks"], True)
+        print_tasks(True)
 
 
 @app.command(short_help="Mark a task as done")
 def done(index: int) -> None:
+    """Mark a task as "done".
+
+    Args:
+        index (int): task index (1-based)
+    """
     index = index - 1
 
     if len(config["tasks"]) == 0:
-        center_print_wrap(
-            "Task list is empty",
-            style="bright_red on bright_white",
+        center_print(
+            "Sorry, I've got no tasks to show", style="bright_red on white", wrap=True
         )
-    elif all_tasks_done():
+        return
+    if all_tasks_done():
         center_print("All tasks are already completed!", "black on green")
-    elif not 0 <= index < len(config["tasks"]):
-        center_print_wrap(
+        return
+    if not 0 <= index < len(config["tasks"]):
+        center_print(
             "Are you sure you gave me the correct number to mark as done?",
             "bright_red on bright_white",
+            wrap=True,
         )
     else:
         config["tasks"][index]["done"] = True
         write_config(config)
         center_print("Updated Task List", "black on green")
-        print_tasks(config["tasks"])
+        print_tasks()
 
 
 @app.command(short_help="Mark a task as undone")
 def undone(index: int) -> None:
+    """Unmark a task as "done".
+
+    Args:
+        index (int): task index (1-based)
+    """
     index = index - 1
     if len(config["tasks"]) == 0:
-        center_print_wrap(
-            "Task list is empty",
-            style="bright_red on bright_white",
+        center_print(
+            "Sorry, I've got no tasks to show", style="bright_red on white", wrap=True
         )
-
-    elif not 0 <= index < len(config["tasks"]):
-        center_print_wrap(
+        return
+    if not 0 <= index < len(config["tasks"]):
+        center_print(
             "Are you sure you gave me the correct number to mark as undone?",
             "bright_red on bright_white",
+            wrap=True,
         )
     else:
         config["tasks"][index]["done"] = False
         write_config(config)
         center_print("Updated Task List", "black on green")
-        print_tasks(config["tasks"])
+        print_tasks()
 
 
 @app.command(short_help="Show all Tasks")
 def showtasks() -> None:
+    """Display the list of tasks."""
     task_num = config["tasks"]
     if len(task_num) == 0:
-        center_print_wrap(
-            "Task list is empty",
-            style="bright_red on bright_white",
+        center_print(
+            "Sorry, I've got no tasks to show", style="bright_red on white", wrap=True
         )
     else:
         table1 = Table(
@@ -151,12 +180,10 @@ def showtasks() -> None:
         table1.add_column("Status")
 
         for index, task in enumerate(task_num):
-
             if task["done"]:
                 task_name = f"[#A0FF55] {task['name']}[/]"
                 task_status = "✅"
                 task_index = f"[#A0FF55] {str(index + 1)} [/]"
-
             else:
                 task_name = f"[#FF5555] {task['name']}[/]"
                 task_status = "❌"
@@ -166,14 +193,20 @@ def showtasks() -> None:
         center_print(table1)
 
 
-def print_tasks(tasks_list: list, forced_print: bool = False) -> None:
+def print_tasks(forced_print: bool = False) -> None:
+    """Logic for displaying the task list."""
     if not all_tasks_done() or forced_print:
         showtasks()
     else:
         center_print("[#61E294]Looking good, no pending tasks 😁[/]")
 
 
-def getquotes() -> list:
+def getquotes() -> dict:
+    """Select a random quote.
+
+    Returns:
+        dict: quote with its metadata
+    """
     __location__ = os.path.realpath(
         os.path.join(os.getcwd(), os.path.dirname(__file__))
     )
@@ -184,6 +217,7 @@ def getquotes() -> list:
 
 @app.command(short_help="Reset all data and run setup")
 def setup() -> None:
+    """Initialize the config file."""
     config = {}
     config["user_name"] = typer.prompt(
         typer.style("Hello! What can I call you?", fg=typer.colors.CYAN)
@@ -198,7 +232,6 @@ def setup() -> None:
     center_print("If you wanna change your name later, please use:", "red")
     console.print(code_markdown)
 
-    # SET DEFAULT VARIABLES IN JSON DATASTORE
     config["initial_setup_done"] = True
     config["tasks"] = []
     write_config(config)
@@ -206,49 +239,44 @@ def setup() -> None:
 
 @app.callback(invoke_without_command=True)
 def show(ctx: typer.Context) -> None:
+    """Greets the user."""
     now = datetime.datetime.now()
     user_name = config["user_name"]
-    # PRINT TASKS
     if ctx.invoked_subcommand is None:
         center_print(
-            rich.rule.Rule(
+            Rule(
                 f"[#FFBF00] Hello {user_name}! It's {now.strftime('%d %b | %I:%M %p')}[/]",
                 style="#FFBF00",
             )
         )
-
-        # IF THERE IS NO INVOKED COMMAND, PRINT THE TASK LIST
-        # PRINT QUOTE
         quote = getquotes()
-        center_print_wrap('[#63D2FF]"' + quote["content"] + '"[/]', "italic")
-        center_print_wrap("[#F03A47]- " + quote["author"] + "[/]\n", "italic")
-        print_tasks(config["tasks"])
+        center_print('[#63D2FF]"' + quote["content"] + '"[/]', "italic", wrap=True)
+        center_print("[#F03A47]- " + quote["author"] + "[/]\n", "italic", wrap=True)
+        print_tasks()
 
 
-def load_config() -> None:
-    # CREATE JSON STORE CONFIG IN ~/.config/please
+def main() -> None:
+    """Load config file and program initialization."""
     global config_path
     config_path = os.path.join(expanduser("~"), ".config", "please")
     if not os.path.exists(config_path):
         os.makedirs(config_path)
 
-    # IF CONFIG ALREADY HAS INITIAL_SETUP_DONE TO TRUE, FIRE THE APP
-    try:  # Try reading the config.json file
+    try:
         with open(os.path.join(config_path, "config.json")) as config_file:
             global config
-            config = json.load(config_file)  # Set config variable to json data
-    except FileNotFoundError:  # If it doesn't exist, create a new config.json file
+            config = json.load(config_file)
+    except FileNotFoundError:
         open(os.path.join(config_path, "config.json"), "w")
         typer.run(setup)
     except json.JSONDecodeError:
         console.print_exception(show_locals=True)
         center_print("Failed while loading configuration", "bold red on white")
-    else:  # if try block raises no exception
+    else:
         if config["initial_setup_done"] is True:
             app()
         else:
             typer.run(setup)
 
 
-if __name__ == "__main__":
-    load_config()
+main()
