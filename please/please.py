@@ -49,11 +49,7 @@ def get_time_of_day(x):
 
 
 def all_tasks_done():
-    completed_all_tasks = True
-    for task in config["tasks"]:
-        if task["done"] == False:
-            completed_all_tasks = False
-    return completed_all_tasks
+    return all(task["done"] for task in config["tasks"])
 
 
 @ app.command(short_help="Change name without resetting data")
@@ -130,6 +126,19 @@ def undone(index: int):
         center_print_wrap(
             "Sorry, I've got no tasks to mark as undone", style="bright_red on bright_white")
 
+@app.command(short_help='Change task order')
+def move(old_index: int, new_index: int):
+    try:
+        config["tasks"][old_index - 1], config["tasks"][new_index - 1] = config["tasks"][new_index - 1], config["tasks"][old_index - 1]
+        write_config(config)
+        if (old_index != new_index):
+            center_print("Updated Task List", "black on green")
+        else:
+            center_print("No Updates Made", "black on yellow")
+        print_tasks(config["tasks"])
+    except:
+        center_print("Please check the entered index values", "black on bright_red")
+    
 
 @app.command(short_help="Show all Tasks")
 def showtasks():
@@ -148,6 +157,8 @@ def showtasks():
                 index + 1) + "[/]" if task["done"] else "[#FF5555]" + str(index + 1) + "[/]"
             table1.add_row(task_index, task_name, task_status)
         center_print(table1)
+        return
+    center_print("[#61E294]Looking good, no pending tasks 😁[/]")
 
 
 def print_tasks(tasks_list, forced_print=False):
