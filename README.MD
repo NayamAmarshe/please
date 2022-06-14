@@ -11,12 +11,19 @@ Get a beautifully formatted minimalistic new tab page with a greeting, date and 
 2. Open your terminal and paste the command below:
 
    ```bash
-   pip install please-cli && echo 'please' >> ~/.`echo $0`rc
+   pip install please-cli
 
    # If you get an error about 'pip not found', just replace pip with pip3.
    ```
-
-3. That's it! Check if `please` command works in your terminal.
+3. To run **please** everytime you open the terminal:
+   ```bash
+   # FOR BASH
+   echo 'please' >> ~/.bashrc
+   
+   # FOR ZSH
+   echo 'please' >> ~/.zshrc
+   ```
+4. That's it! Check if `please` command works in your terminal.
 
 ### Method 2:
 
@@ -31,7 +38,14 @@ Get a beautifully formatted minimalistic new tab page with a greeting, date and 
    ```
 
    Change the path of the file if you downloaded it elsewhere.
-
+3. To run **please** everytime you open the terminal:
+   ```bash
+   # FOR BASH
+   echo 'please' >> ~/.bashrc
+   
+   # FOR ZSH
+   echo 'please' >> ~/.zshrc
+   ```
 4. That's it! Check if `please` command works in your terminal.
 
 ###### Having trouble with installation or have any ideas? Please create an issue ticket :)
