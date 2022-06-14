@@ -32,7 +32,7 @@ Get a beautifully formatted minimalistic new tab page with a greeting, date and 
 3. Open terminal and paste the command below:
 
    ```bash
-   pip install --user ~/Downloads/please_cli* && echo 'please' >> ~/.`echo $0`rc
+   pip install --user ~/Downloads/please_cli*
 
    # If you get an error about 'pip not found', just replace pip with pip3.
    ```
@@ -49,6 +49,14 @@ Get a beautifully formatted minimalistic new tab page with a greeting, date and 
 4. That's it! Check if `please` command works in your terminal.
 
 ###### Having trouble with installation or have any ideas? Please create an issue ticket :)
+
+# Troubleshooting
+
+Getting a `command not found: please` error? That means the Python modules installation folder is not in PATH.
+To fix this:
+```bash
+echo 'export PATH="$PATH:$HOME/.local/bin"' >> ~/.profile
+```
 
 # Commands
 
