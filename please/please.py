@@ -89,6 +89,7 @@ def delete(index: int) -> None:
             "Sorry, There are no tasks left to delete", style="bright_red on white", wrap=True
         )
         return
+
     if not 0 <= index < len(config["tasks"]):
         center_print(
             "Are you sure you gave me the correct number to delete?",
@@ -116,12 +117,13 @@ def done(index: int) -> None:
             "Sorry, There are no tasks to mark as done", style="bright_red on white", wrap=True
         )
         return
-    
+
     if (config["tasks"][index]["done"] == True):
-        center_print("No Updates Made, Task Already Done", style="black on yellow")
+        center_print("No Updates Made, Task Already Done",
+                     style="black on yellow")
         print_tasks()
         return
-    
+
     if all_tasks_done():
         center_print("All tasks are already completed!", "black on green")
         return
@@ -154,7 +156,8 @@ def undone(index: int) -> None:
         return
 
     if (config["tasks"][index]["done"] == False):
-        center_print("No Updates Made, Task Still Pending", style="black on yellow")
+        center_print("No Updates Made, Task Still Pending",
+                     style="black on yellow")
         print_tasks()
         return
 
@@ -204,21 +207,19 @@ def move(old_index: int, new_index: int):
 def showtasks() -> None:
     """Display the list of tasks."""
     task_num = config["tasks"]
-    if len(task_num) == 0:
-        center_print(
-            "There are no tasks to show", style="bright_red on white", wrap=True
-        )
-    else:
-        table1 = Table(
-            title="Tasks",
-            title_style="grey39",
-            header_style="#e85d04",
-            style="#e85d04 bold",
-        )
-        table1.add_column("Number", style="#e85d04")
-        table1.add_column("Task")
-        table1.add_column("Status")
+    table1 = Table(
+        title="Tasks",
+        title_style="grey39",
+        header_style="#e85d04",
+        style="#e85d04 bold",
+    )
+    table1.add_column("Number", style="#e85d04")
+    table1.add_column("Task")
+    table1.add_column("Status")
 
+    if len(task_num) == 0:
+        center_print(table1)
+    else:
         for index, task in enumerate(task_num):
             if task["done"]:
                 task_name = f"[#A0FF55] {task['name']}[/]"
@@ -231,8 +232,9 @@ def showtasks() -> None:
 
             table1.add_row(task_index, task_name, task_status)
         center_print(table1)
-        return
-    center_print("[#61E294]Looking good, no pending tasks 😁[/]")
+
+    if(all_tasks_done()):
+        center_print("[#61E294]Looking good, no pending tasks 😁[/]")
 
 
 def print_tasks(forced_print: bool = False) -> None:
@@ -282,18 +284,23 @@ def setup() -> None:
 @app.callback(invoke_without_command=True)
 def show(ctx: typer.Context) -> None:
     """Greets the user."""
-    now = datetime.datetime.now()
+    date_now = datetime.datetime.now()
     user_name = config["user_name"]
+
     if ctx.invoked_subcommand is None:
-        center_print(
-            Rule(
-                f"[#FFBF00] Hello {user_name}! It's {now.strftime('%d %b | %I:%M %p')}[/]",
-                style="#FFBF00",
-            )
-        )
+        date_text = f"[#FFBF00] Hello {user_name}! It's {date_now.strftime('%d %b | %I:%M %p')}[/]"
+        try:
+            if config["disable_line"]:
+                center_print(date_text)
+            else:
+                pass
+        except:
+            center_print(Rule(date_text, style="#FFBF00"))
         quote = getquotes()
-        center_print('[#63D2FF]"' + quote["content"] + '"[/]', "italic", wrap=True)
-        center_print("[#F03A47]- " + quote["author"] + "[/]\n", "italic", wrap=True)
+        center_print('[#63D2FF]"' + quote["content"] +
+                     '"[/]', "italic", wrap=True)
+        center_print("[#F03A47]- " + quote["author"] +
+                     "[/]\n", "italic", wrap=True)
         print_tasks()
 
 
