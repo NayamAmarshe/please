@@ -86,7 +86,7 @@ def delete(index: int) -> None:
     index = index - 1
     if len(config["tasks"]) == 0:
         center_print(
-            "Sorry, I've got no tasks to show", style="bright_red on white", wrap=True
+            "Sorry, There are no tasks left to delete", style="bright_red on white", wrap=True
         )
         return
     if not 0 <= index < len(config["tasks"]):
@@ -111,12 +111,17 @@ def done(index: int) -> None:
         index (int): task index (1-based)
     """
     index = index - 1
-
     if len(config["tasks"]) == 0:
         center_print(
-            "Sorry, I've got no tasks to show", style="bright_red on white", wrap=True
+            "Sorry, There are no tasks to mark as done", style="bright_red on white", wrap=True
         )
         return
+    
+    if (config["tasks"][index]["done"] == True):
+        center_print("No Updates Made, Task Already Done", style="black on yellow")
+        print_tasks()
+        return
+    
     if all_tasks_done():
         center_print("All tasks are already completed!", "black on green")
         return
@@ -141,11 +146,18 @@ def undone(index: int) -> None:
         index (int): task index (1-based)
     """
     index = index - 1
+
     if len(config["tasks"]) == 0:
         center_print(
-            "Sorry, I've got no tasks to show", style="bright_red on white", wrap=True
+            "Sorry, There are no tasks to mark as undone", style="bright_red on white", wrap=True
         )
         return
+
+    if (config["tasks"][index]["done"] == False):
+        center_print("No Updates Made, Task Still Pending", style="black on yellow")
+        print_tasks()
+        return
+
     if not 0 <= index < len(config["tasks"]):
         center_print(
             "Are you sure you gave me the correct number to mark as undone?",
@@ -167,6 +179,10 @@ def move(old_index: int, new_index: int):
         old_index (int): current task index
         new_index (int): new task index
     """
+    if (len(config["tasks"]) == 0):
+        center_print(
+            "Sorry, cannot move tasks as the Task list is empty", style="black on bright_red"
+        )
     try:
         config["tasks"][old_index - 1], config["tasks"][new_index - 1] = (
             config["tasks"][new_index - 1],
@@ -190,7 +206,7 @@ def showtasks() -> None:
     task_num = config["tasks"]
     if len(task_num) == 0:
         center_print(
-            "Sorry, I've got no tasks to show", style="bright_red on white", wrap=True
+            "There are no tasks to show", style="bright_red on white", wrap=True
         )
     else:
         table1 = Table(
