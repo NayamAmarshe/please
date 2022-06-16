@@ -76,6 +76,9 @@ please done <TASK NUMBER>
 # Mark task as undone
 please undone <TASK NUMBER>
 
+# Change task order
+please move <CURRENT TASK NUMBER> <NEW TASK NUMBER>
+
 # Show tasks even if all tasks are markded as done
 please showtasks
 
