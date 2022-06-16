@@ -3,32 +3,26 @@ name = "please-cli"
 version = "0.1.2"
 description = "A new tab page for your terminal"
 authors = ["Nayam Amarshe", "TGS963"]
-packages = [{include = "please"}]
-license="MIT"
-readme="README.MD"
-repository="https://github.com/NayamAmarshe/please"
-homepage="https://github.com/NayamAmarshe/please"
-documentation="https://github.com/NayamAmarshe/please"
-keywords=["please", "cli", "new tab"]
+packages = [{ include = "please" }]
+license = "MIT"
+readme = "README.MD"
+repository = "https://github.com/NayamAmarshe/please"
+homepage = "https://github.com/NayamAmarshe/please"
+documentation = "https://github.com/NayamAmarshe/please"
+keywords = ["please", "cli", "new tab"]
 
 [tool.poetry.dependencies]
 python = "^3.8"
 typer = "^0.4.1"
 rich = "^12.3.0"
-pyfiglet = "^0.8.post1"
-python-jsonstore = "^1.3.0"
-art = "^5.6"
-autopep8 = "^1.6.0"
-ics = "^0.7"
-requests = "^2.27.1"
-imgrender = "^0.0.4"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
+autopep8 = "^1.6.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.scripts]
-please="please.please:main"
+please = "please.please:main"
