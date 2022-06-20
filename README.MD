@@ -79,6 +79,9 @@ please undone <TASK NUMBER>
 # Change task order
 please move <CURRENT TASK NUMBER> <NEW TASK NUMBER>
 
+# Delete tasks marked as done from task list
+please clean
+
 # Show tasks even if all tasks are markded as done
 please showtasks
 
