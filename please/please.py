@@ -1,8 +1,10 @@
 #!/usr/bin/env python
+#from asyncore import write
 import datetime
 import json
 import os
 import random
+from re import L
 import shutil
 from os.path import expanduser
 
@@ -201,6 +203,21 @@ def move(old_index: int, new_index: int):
         center_print(
             "Please check the entered index values", style="black on bright_red"
         )
+
+@app.command(short_help="Clean up tasks marked as done from the task list")
+def clean() -> None:
+    res = []
+    for i in config['tasks']:
+        if i['done'] != True:
+            res.append(i)
+    if config['tasks'] != res:
+        config['tasks'] = res
+        write_config(config)
+        center_print("Updated Task List", style="black on green")
+        print_tasks(config["tasks"])
+        return
+    center_print("No Updates Made", style="black on yellow")
+    print_tasks(config["tasks"])
 
 
 @app.command(short_help="Show all Tasks")
