@@ -314,10 +314,8 @@ def show(ctx: typer.Context) -> None:
         except:
             center_print(Rule(date_text, style="#FFBF00"))
         quote = getquotes()
-        center_print('[#63D2FF]"' + quote["content"] +
-                     '"[/]', "italic", wrap=True)
-        center_print("[#F03A47]- " + quote["author"] +
-                     "[/]\n", "italic", wrap=True)
+        center_print(f'[#63D2FF]"{quote["content"]}[/]', wrap=True)
+        center_print(f'[#F03A47][i]- {quote["author"]}[/i][/]\n', wrap=True)
         print_tasks()
 
 
