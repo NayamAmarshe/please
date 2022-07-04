@@ -181,6 +181,24 @@ def clean() -> None:
     print_tasks(config["tasks"])
 
 
+@app.command(short_help="Toggle Time Format from 24 Hours to 12 Hours")
+def changetimeformat() -> None:
+    try:
+        if config["time_format_24h"] is (None or False):
+            config["time_format_24h"] = True
+            center_print("Changed Time Format from 12h to 24h",
+                         "black on green")
+        else:
+            config["time_format_24h"] = False
+            center_print("Changed Time Format from 24h to 12h",
+                         "black on green")
+    except:
+        config["time_format_24h"] = True
+        center_print("Changed Time Format from 24h to 12h",
+                     "black on green")
+    write_config(config)
+
+
 @app.command(short_help="Show all Tasks")
 def showtasks() -> None:
     task_num = config["tasks"]
@@ -264,7 +282,17 @@ def show(ctx: typer.Context) -> None:
     user_name = config["user_name"]
 
     if ctx.invoked_subcommand is None:
-        date_text = f"[#FFBF00] Hello {user_name}! It's {date_now.strftime('%d %b | %I:%M %p')}[/]"
+        date_text = ""
+        try:
+            if config["time_format_24h"] is (None or False):
+                date_text = f"[#FFBF00] Hello {user_name}! It's {date_now.strftime('%d %b | %I:%M %p')}[/]"
+            else:
+                date_text = f"[#FFBF00] Hello {user_name}! It's {date_now.strftime('%d %b | %H:%M')}[/]"
+        except:
+            config["time_format_24h"] = True
+            write_config(config)
+            date_text = f"[#FFBF00] Hello {user_name}! It's {date_now.strftime('%d %b | %I:%M %p')}[/]"
+
         try:
             if config["disable_line"]:
                 center_print(date_text)
