@@ -4,9 +4,9 @@ import datetime
 import json
 import os
 import random
-from re import L
 import shutil
 from os.path import expanduser
+from re import L
 
 import typer
 from rich.align import Align
@@ -35,30 +35,16 @@ def center_print(text, style: str = None, wrap: bool = False) -> None:
 
 
 def write_config(data: dict) -> None:
-    """Save the config file.
-
-    Args:
-        data (dict): config file
-    """
     with open(os.path.join(config_path, "config.json"), "w") as of:
         of.write(json.dumps(data, indent=2))
 
 
 def all_tasks_done() -> bool:
-    """Check if all listed tasks are marked "done".
-
-    Returns:
-        bool: True if all are marked "done", else False
-    """
     return all(task["done"] for task in config["tasks"])
 
 
 @app.command(short_help="Change name without resetting data")
 def callme(name: str) -> None:
-    """Update the name.
-    Args:
-        name (str): new name
-    """
     config["user_name"] = name
     write_config(config)
     center_print("\nThanks for letting me know your name!\n", "black on green")
@@ -66,11 +52,6 @@ def callme(name: str) -> None:
 
 @app.command(short_help="Add a Task")
 def add(task: str) -> None:
-    """Add new task to the list.
-
-    Args:
-        task (str): task name
-    """
     new_task = {"name": task, "done": False}
     config["tasks"].append(new_task)
     write_config(config)
@@ -80,11 +61,6 @@ def add(task: str) -> None:
 
 @app.command(short_help="Deletes a Task")
 def delete(index: int) -> None:
-    """Delete an existing task.
-
-    Args:
-        index (int): task index (1-based)
-    """
     index = index - 1
     if len(config["tasks"]) == 0:
         center_print(
@@ -108,11 +84,6 @@ def delete(index: int) -> None:
 
 @app.command(short_help="Mark a task as done")
 def done(index: int) -> None:
-    """Mark a task as "done".
-
-    Args:
-        index (int): task index (1-based)
-    """
     index = index - 1
     if len(config["tasks"]) == 0:
         center_print(
@@ -144,11 +115,6 @@ def done(index: int) -> None:
 
 @app.command(short_help="Mark a task as undone")
 def undone(index: int) -> None:
-    """Unmark a task as "done".
-
-    Args:
-        index (int): task index (1-based)
-    """
     index = index - 1
 
     if len(config["tasks"]) == 0:
@@ -178,12 +144,6 @@ def undone(index: int) -> None:
 
 @app.command(short_help="Change task order")
 def move(old_index: int, new_index: int):
-    """Change the order of task.
-
-    Args:
-        old_index (int): current task index
-        new_index (int): new task index
-    """
     if (len(config["tasks"]) == 0):
         center_print(
             "Sorry, cannot move tasks as the Task list is empty", style="black on bright_red"
@@ -204,6 +164,7 @@ def move(old_index: int, new_index: int):
             "Please check the entered index values", style="black on bright_red"
         )
 
+
 @app.command(short_help="Clean up tasks marked as done from the task list")
 def clean() -> None:
     res = []
@@ -222,7 +183,6 @@ def clean() -> None:
 
 @app.command(short_help="Show all Tasks")
 def showtasks() -> None:
-    """Display the list of tasks."""
     task_num = config["tasks"]
     table1 = Table(
         title="Tasks",
@@ -255,7 +215,6 @@ def showtasks() -> None:
 
 
 def print_tasks(forced_print: bool = False) -> None:
-    """Logic for displaying the task list."""
     if not all_tasks_done() or forced_print:
         showtasks()
     else:
