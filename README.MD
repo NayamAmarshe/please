@@ -1,8 +1,12 @@
-# 🙏 Please - New Tab Page for your Terminal 🙏
+<h1 align="center">🙏 Please - New Tab Page for your Terminal 🙏</h1>
 
-Get a beautifully formatted minimalistic new tab page with a greeting, date and time, inspirational quotes, your personal tasks and to-do list everytime you open the terminal.
+<h4 align="center">Get a beautifully formatted minimalistic new tab page with a greeting, date and time, inspirational quotes, your personal tasks and to-do list everytime you open the terminal.</h4>
 
 <p align="center"><img src="https://user-images.githubusercontent.com/25067102/173348894-09190c99-baff-477a-9b48-b4d3cff0f029.gif"></img></center>
+
+## 📖 Table of Contents
+
+- [🚀 Installation](#installation)
 
 # Installation
 
