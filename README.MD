@@ -165,4 +165,9 @@ and also edit your **.zshrc** or **.bashrc** file and remove the line that says 
 
 #
 
+# Credits
+
+- Thanks to @CodePleaseRun & @guedesfelipe for their contributions.
+- Thanks to @lukePeavey for the quotes.json file taken from quotable.io
+
 #### Made by TGS963 and NayamAmarshe with ⌨ and 🖱
