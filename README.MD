@@ -4,11 +4,18 @@
 
 <p align="center"><img src="https://user-images.githubusercontent.com/25067102/173348894-09190c99-baff-477a-9b48-b4d3cff0f029.gif"></img></center>
 
-## 📖 Table of Contents
+# 📖 Table of Contents
 
-- [🚀 Installation](#installation)
+- [🚀 Installation](#-installation)
+   - [1️⃣ Method 1](#method-1)
+   - [2️⃣ Method 2](#method-2)
+- [🚑 Troubleshooting](#-troubleshooting)
+- [👨‍💻 Commands](#-commands)
+- [🧰 Additional Optional Configuration](#-additional-optional-configuration)
+- [🚮 Uninstalling](#-uninstalling)
+- [❤ Credits](#-credits)
 
-# Installation
+# 🚀 Installation
 
 ### Method 1:
 
@@ -61,7 +68,7 @@
 
 ###### Having trouble with installation or have any ideas? Please create an issue ticket :)
 
-# Troubleshooting
+# 🚑 Troubleshooting
 
 Getting a `command not found: please` error? That means the Python modules installation folder is not in PATH.
 To fix this:
@@ -70,7 +77,7 @@ To fix this:
 echo 'export PATH="$PATH:$HOME/.local/bin"' >> ~/.profile
 ```
 
-# Commands
+# 👨‍💻 Commands
 
 ```bash
 # Show time, quotes and tasks
@@ -107,7 +114,7 @@ please clean
 please setup
 ```
 
-# Additional Optional Configuration
+# 🧰 Additional Optional Configuration
 
 ## Remove Horizontal Line in please's output
 
@@ -116,7 +123,7 @@ please setup
 3. Add `"diable_line": true` at the end (don't forget to add a `,` at the end of the previous line)\
 ![](./illustration1.jpg)
 
-# Local Development
+# 💻 Local Development
 
 1. To get started, first install poetry:
 
@@ -157,7 +164,7 @@ poetry build
 
 - The package will be generated in **dist** folder, you can then use pip to install the WHL file.
 
-# Uninstalling
+# 🚮 Uninstalling
 
 Open your terminal and type:
 
@@ -167,9 +174,7 @@ pip uninstall please-cli
 
 and also edit your **.zshrc** or **.bashrc** file and remove the line that says `please` at the end of the file.
 
-#
-
-# Credits
+# ♥ Credits
 
 - Thanks to @CodePleaseRun & @guedesfelipe for their contributions.
 - Thanks to @lukePeavey for the quotes.json file taken from quotable.io
