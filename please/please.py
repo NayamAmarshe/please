@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#from asyncore import write
+# from asyncore import write
 import datetime
 import json
 import os
@@ -17,6 +17,11 @@ from rich.table import Table
 
 app = typer.Typer()
 console = Console()
+
+COLOR_INFO = "cyan1 on purple3"
+COLOR_SUCCESS = "black on green"
+COLOR_WARNING = "bright_red on bright_white"
+COLOR_ERROR = "black on bright_red"
 
 
 def center_print(text, style: str = None, wrap: bool = False) -> None:
@@ -55,7 +60,7 @@ def add(task: str) -> None:
     new_task = {"name": task, "done": False}
     config["tasks"].append(new_task)
     write_config(config)
-    center_print(f'Added "{task}" to the list', "cyan1 on purple3")
+    center_print(f'Added "{task}" to the list', COLOR_SUCCESS)
     print_tasks()
 
 
@@ -64,90 +69,95 @@ def delete(index: int) -> None:
     index = index - 1
     if len(config["tasks"]) == 0:
         center_print(
-            "Sorry, There are no tasks left to delete", style="bright_red on white", wrap=True
+            "Sorry, There are no tasks left to delete", COLOR_INFO, wrap=True
         )
         return
 
     if not 0 <= index < len(config["tasks"]):
         center_print(
             "Are you sure you gave me the correct number to delete?",
-            "bright_red on bright_white",
+            COLOR_WARNING,
             wrap=True,
         )
     else:
         deleted_task = config["tasks"][index]
         del config["tasks"][index]
         write_config(config)
-        center_print(f"Deleted '{deleted_task['name']}'", "cyan1 on purple3")
+        center_print(f"Deleted '{deleted_task['name']}'", COLOR_SUCCESS)
         print_tasks(True)
 
 
 @app.command(short_help="Mark a task as done")
 def done(index: int) -> None:
     index = index - 1
+
+    if not 0 <= index < len(config["tasks"]):
+        center_print(
+            "Are you sure you gave me the correct number to mark as done?",
+            COLOR_WARNING,
+            wrap=True,
+        )
+
     if len(config["tasks"]) == 0:
         center_print(
-            "Sorry, There are no tasks to mark as done", style="bright_red on white", wrap=True
+            "Sorry, There are no tasks to mark as done", COLOR_ERROR, wrap=True
         )
         return
 
     if (config["tasks"][index]["done"] == True):
         center_print("No Updates Made, Task Already Done",
-                     style="black on yellow")
+                     COLOR_INFO)
         print_tasks()
         return
 
     if all_tasks_done():
-        center_print("All tasks are already completed!", "black on green")
+        center_print("All tasks are already completed!", COLOR_SUCCESS)
         return
-    if not 0 <= index < len(config["tasks"]):
-        center_print(
-            "Are you sure you gave me the correct number to mark as done?",
-            "bright_red on bright_white",
-            wrap=True,
-        )
-    else:
-        config["tasks"][index]["done"] = True
-        write_config(config)
-        center_print("Updated Task List", "black on green")
-        print_tasks()
+
+    config["tasks"][index]["done"] = True
+    write_config(config)
+    center_print("Updated Task List", COLOR_SUCCESS)
+    print_tasks()
 
 
 @app.command(short_help="Mark a task as undone")
 def undone(index: int) -> None:
     index = index - 1
 
+    if not 0 <= index < len(config["tasks"]):
+        center_print(
+            "Are you sure you gave me the correct number to mark as undone?",
+            COLOR_WARNING,
+            wrap=True,
+        )
+        return
+
     if len(config["tasks"]) == 0:
         center_print(
-            "Sorry, There are no tasks to mark as undone", style="bright_red on white", wrap=True
+            "Sorry, There are no tasks to mark as undone", COLOR_INFO, wrap=True
         )
         return
 
     if (config["tasks"][index]["done"] == False):
         center_print("No Updates Made, Task Still Pending",
-                     style="black on yellow")
+                     COLOR_INFO)
         print_tasks()
         return
 
-    if not 0 <= index < len(config["tasks"]):
-        center_print(
-            "Are you sure you gave me the correct number to mark as undone?",
-            "bright_red on bright_white",
-            wrap=True,
-        )
-    else:
-        config["tasks"][index]["done"] = False
-        write_config(config)
-        center_print("Updated Task List", "black on green")
-        print_tasks()
+    config["tasks"][index]["done"] = False
+    write_config(config)
+    center_print("Updated Task List", COLOR_SUCCESS)
+    print_tasks()
 
 
 @app.command(short_help="Change task order")
 def move(old_index: int, new_index: int):
     if (len(config["tasks"]) == 0):
         center_print(
-            "Sorry, cannot move tasks as the Task list is empty", style="black on bright_red"
+            "Sorry, cannot move tasks as the Task list is empty", COLOR_ERROR
         )
+        return
+
     try:
         config["tasks"][old_index - 1], config["tasks"][new_index - 1] = (
             config["tasks"][new_index - 1],
@@ -155,13 +165,13 @@ def move(old_index: int, new_index: int):
         )
         write_config(config)
         if old_index != new_index:
-            center_print("Updated Task List", style="black on green")
+            center_print("Updated Task List", COLOR_SUCCESS)
         else:
-            center_print("No Updates Made", style="black on yellow")
+            center_print("No Updates Made", COLOR_INFO)
         print_tasks(config["tasks"])
     except:
         center_print(
-            "Please check the entered index values", style="black on bright_red"
+            "Please check the entered index values", COLOR_WARNING
         )
 
 
@@ -174,10 +184,10 @@ def clean() -> None:
     if config['tasks'] != res:
         config['tasks'] = res
         write_config(config)
-        center_print("Updated Task List", style="black on green")
+        center_print("Updated Task List", COLOR_SUCCESS)
         print_tasks(config["tasks"])
         return
-    center_print("No Updates Made", style="black on yellow")
+    center_print("No Updates Made", COLOR_INFO)
     print_tasks(config["tasks"])
 
 
@@ -187,15 +197,15 @@ def changetimeformat() -> None:
         if config["time_format_24h"] is (None or False):
             config["time_format_24h"] = True
             center_print("Changed Time Format from 12h to 24h",
-                         "black on green")
+                         COLOR_SUCCESS)
         else:
             config["time_format_24h"] = False
             center_print("Changed Time Format from 24h to 12h",
-                         "black on green")
+                         COLOR_SUCCESS)
     except:
         config["time_format_24h"] = True
         center_print("Changed Time Format from 24h to 12h",
-                     "black on green")
+                     COLOR_SUCCESS)
     write_config(config)
 
 
@@ -322,7 +332,7 @@ def main() -> None:
         typer.run(setup)
     except json.JSONDecodeError:
         console.print_exception(show_locals=True)
-        center_print("Failed while loading configuration", "bold red on white")
+        center_print("Failed while loading configuration", COLOR_ERROR)
     else:
         if config["initial_setup_done"] is True:
             app()
