@@ -88,7 +88,7 @@ def delete(index: int) -> None:
 
 
 @app.command(short_help="Mark a task as done")
-def done(index: int) -> None:
+def do(index: int) -> None:
     index = index - 1
 
     if not 0 <= index < len(config["tasks"]):
@@ -97,6 +97,7 @@ def done(index: int) -> None:
             COLOR_WARNING,
             wrap=True,
         )
+        return
 
     if len(config["tasks"]) == 0:
         center_print(
@@ -121,7 +122,7 @@ def done(index: int) -> None:
 
 
 @app.command(short_help="Mark a task as undone")
-def undone(index: int) -> None:
+def undo(index: int) -> None:
     index = index - 1
 
     if not 0 <= index < len(config["tasks"]):

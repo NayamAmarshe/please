@@ -1,4 +1,5 @@
 # 🙏 Please - New Tab Page for your Terminal 🙏
+
 Get a beautifully formatted minimalistic new tab page with a greeting, date and time, inspirational quotes, your personal tasks and to-do list everytime you open the terminal.
 
 <p align="center"><img src="https://user-images.githubusercontent.com/25067102/173348894-09190c99-baff-477a-9b48-b4d3cff0f029.gif"></img></center>
@@ -15,14 +16,17 @@ Get a beautifully formatted minimalistic new tab page with a greeting, date and 
 
    # If you get an error about 'pip not found', just replace pip with pip3.
    ```
+
 3. To run **please** everytime you open the terminal:
+
    ```bash
    # FOR BASH
    echo 'please' >> ~/.bashrc
-   
+
    # FOR ZSH
    echo 'please' >> ~/.zshrc
    ```
+
 4. That's it! Check if `please` command works in your terminal.
 
 ### Method 2:
@@ -38,15 +42,18 @@ Get a beautifully formatted minimalistic new tab page with a greeting, date and 
    ```
 
    Change the path of the file if you downloaded it elsewhere.
-3. To run **please** everytime you open the terminal:
+
+4. To run **please** everytime you open the terminal:
+
    ```bash
    # FOR BASH
    echo 'please' >> ~/.bashrc
-   
+
    # FOR ZSH
    echo 'please' >> ~/.zshrc
    ```
-4. That's it! Check if `please` command works in your terminal.
+
+5. That's it! Check if `please` command works in your terminal.
 
 ###### Having trouble with installation or have any ideas? Please create an issue ticket :)
 
@@ -54,6 +61,7 @@ Get a beautifully formatted minimalistic new tab page with a greeting, date and 
 
 Getting a `command not found: please` error? That means the Python modules installation folder is not in PATH.
 To fix this:
+
 ```bash
 echo 'export PATH="$PATH:$HOME/.local/bin"' >> ~/.profile
 ```
@@ -71,20 +79,38 @@ please add "TASK NAME"
 please delete <TASK NUMBER>
 
 # Mark task as done
-please done <TASK NUMBER>
+please do <TASK NUMBER>
 
 # Mark task as undone
-please undone <TASK NUMBER>
+please undo <TASK NUMBER>
 
 # Show tasks even if all tasks are markded as done
 please showtasks
 
+# Move task to specified position
+please move <TASK NUMBER 1> <TASK NUMBER 2>
+
+# Toggle Time between 24 hours and 12 hours format
+please changetimeformat
+
 # Change your name
 please callme "NAME"
+
+# Delete all done tasks
+please clean
 
 # Reset all settings and tasks
 please setup
 ```
+
+# Additional Optional Configuration
+
+## Remove Horizontal Line in please's output
+
+1.Navigate to `~/.config/please`  
+2. Open config.json  
+3. Add `"diable_line": true` at the end (don't forget to add a `,` at the end of the previous line)\
+![](./illustration1.jpg)
 
 # Local Development
 
