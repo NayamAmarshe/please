@@ -99,7 +99,7 @@ please undo <TASK NUMBER>
 please showtasks
 
 # Move task to specified position
-please move <TASK NUMBER 1> <TASK NUMBER 2>
+please move <OLD NUMBER> <NEW NUMBER>
 
 # Toggle Time between 24 hours and 12 hours format
 please changetimeformat
