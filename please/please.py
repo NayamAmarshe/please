@@ -7,6 +7,7 @@ import random
 import shutil
 from os.path import expanduser
 from re import L
+from xmlrpc.client import boolean
 
 import typer
 from rich.align import Align
@@ -53,6 +54,12 @@ def callme(name: str) -> None:
     config["user_name"] = name
     write_config(config)
     center_print("\nThanks for letting me know your name!\n", "black on green")
+
+@app.command(short_help="Change display of quotes without resetting data")
+def quote(display_quote: bool) -> None:
+    config["display_quote"] = display_quote
+    write_config(config)
+    center_print("\nThanks for letting me know that!\n", "black on green")
 
 
 @app.command(short_help="Add a Task")
@@ -281,6 +288,27 @@ def setup() -> None:
     center_print("If you wanna change your name later, please use:", "red")
     console.print(code_markdown)
 
+    config["display_quote"] = True
+    display_quote = typer.prompt(
+        typer.style("Do you want me to show you quotes? (y/n)", fg=typer.colors.CYAN)
+    )
+
+    while display_quote not in ('y,Y,n,N'):
+        center_print("Sorry, that is not a valid choice", COLOR_ERROR)
+        display_quote = typer.prompt(
+        typer.style("Do you want me to show you quotes? (y/n)", fg=typer.colors.CYAN))
+    if display_quote in ('n,N'):
+        config["display_quote"] = False
+    
+    code_markdown = Markdown(
+        """
+        please quote <True or False>
+    """
+    )
+    center_print("\nThanks for letting me know that!")
+    center_print("If you wanna change that later, please use:", "red")
+    console.print(code_markdown)
+
     config["initial_setup_done"] = True
     config["tasks"] = []
     write_config(config)
@@ -311,9 +339,12 @@ def show(ctx: typer.Context) -> None:
                 pass
         except:
             center_print(Rule(date_text, style="#FFBF00"))
-        quote = getquotes()
-        center_print(f'[#63D2FF]"{quote["content"]}[/]', wrap=True)
-        center_print(f'[#F03A47][i]- {quote["author"]}[/i][/]\n', wrap=True)
+
+        print(config["display_quote"])
+        if config["display_quote"]:
+            quote = getquotes()
+            center_print(f'[#63D2FF]"{quote["content"]}[/]', wrap=True)
+            center_print(f'[#F03A47][i]- {quote["author"]}[/i][/]\n', wrap=True)
         print_tasks()
 
 
