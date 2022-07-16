@@ -54,6 +54,15 @@ def callme(name: str) -> None:
     write_config(config)
     center_print("\nThanks for letting me know your name!\n", "black on green")
 
+@app.command(short_help="Change display of quotes without resetting data")
+def quote() -> None:
+    if config["display_quote"]: 
+        config["display_quote"] = False
+    else:
+        config["display_quote"] = True
+    write_config(config)
+    center_print("\nThanks for letting me know that!\n", "black on green")
+
 
 @app.command(short_help="Add a Task")
 def add(task: str) -> None:
@@ -281,6 +290,27 @@ def setup() -> None:
     center_print("If you wanna change your name later, please use:", "red")
     console.print(code_markdown)
 
+    config["display_quote"] = True
+    display_quote = typer.prompt(
+        typer.style("Do you want me to show you quotes? (y/n)", fg=typer.colors.CYAN)
+    )
+
+    while display_quote not in ('y,Y,n,N'):
+        center_print("Sorry, that is not a valid choice", COLOR_ERROR)
+        display_quote = typer.prompt(   
+        typer.style("Do you want me to show you quotes? (y/n)", fg=typer.colors.CYAN))
+    if display_quote in ('n,N'):
+        config["display_quote"] = False
+    
+    code_markdown = Markdown(
+        """
+        please quote
+    """
+    )
+    center_print("\nThanks for letting me know that!")
+    center_print("If you wanna toggle that later, please use:", "red")
+    console.print(code_markdown)
+
     config["initial_setup_done"] = True
     config["tasks"] = []
     write_config(config)
@@ -311,9 +341,11 @@ def show(ctx: typer.Context) -> None:
                 pass
         except:
             center_print(Rule(date_text, style="#FFBF00"))
-        quote = getquotes()
-        center_print(f'[#63D2FF]"{quote["content"]}[/]', wrap=True)
-        center_print(f'[#F03A47][i]- {quote["author"]}[/i][/]\n', wrap=True)
+
+        if config["display_quote"]:
+            quote = getquotes()
+            center_print(f'[#63D2FF]"{quote["content"]}[/]', wrap=True)
+            center_print(f'[#F03A47][i]- {quote["author"]}[/i][/]\n', wrap=True)
         print_tasks()
 
 

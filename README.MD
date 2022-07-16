@@ -110,6 +110,9 @@ please changetimeformat
 # Change your name
 please callme "NAME"
 
+# Toggle if quotes are displayed
+please quote
+
 # Delete all done tasks
 please clean
 
